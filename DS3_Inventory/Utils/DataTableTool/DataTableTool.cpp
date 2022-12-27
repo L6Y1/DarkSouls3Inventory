@@ -6,6 +6,7 @@
 #include "Engine/DataTable.h"
 
 UDataTable *FDataTableTool::DT_MenuTopType1Attr = nullptr;
+UDataTable *FDataTableTool::DT_NavButtonAttr = nullptr;
 
 FMenuTopType1Attr * FDataTableTool::GetMenuTopType1Attr(FName RowName)
 {
@@ -18,6 +19,22 @@ FMenuTopType1Attr * FDataTableTool::GetMenuTopType1Attr(FName RowName)
 	if (DT_MenuTopType1Attr->GetRowMap().Contains(RowName))
 	{
 		auto Result = DT_MenuTopType1Attr->FindRow<FMenuTopType1Attr>(RowName, TEXT("None"), true);
+		return Result;
+	}
+	return nullptr;
+}
+
+FNavButtonAttr * FDataTableTool::GetNavButtonAttr(FName RowName)
+{
+	if (!DT_NavButtonAttr)
+	{
+		DT_NavButtonAttr = LoadObject<UDataTable>(nullptr, TEXT("DataTable'/Game/DataTables/DT_MenuTopType1Attr.DT_MenuTopType1Attr'"));
+		check(DT_NavButtonAttr);
+	}
+
+	if (DT_NavButtonAttr->GetRowMap().Contains(RowName))
+	{
+		auto Result = DT_NavButtonAttr->FindRow<FNavButtonAttr>(RowName, TEXT("None"), true);
 		return Result;
 	}
 	return nullptr;

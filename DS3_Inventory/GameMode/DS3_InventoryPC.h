@@ -18,6 +18,7 @@ private:
 	UClass *MainUIClass;
 
 	UUserWidget *MainUIWidget;
+
 	
 	ADS3_InventoryPC();
 

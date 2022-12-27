@@ -17,15 +17,26 @@ class DS3_INVENTORY_API UStructTypes : public UObject
 };
 
 USTRUCT(BlueprintType)
-struct FNavButtonAttrs : public FTableRowBase
+struct FNavButtonAttr : public FTableRowBase
 {
 	GENERATED_BODY()
 
 public:
-	FNavButtonAttrs() {}
+	FNavButtonAttr() {}
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FVector2D ButtonSize;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FName ButtonImage;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FName HoveredImage;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FName ToggledWidgetClass;
+	
+	
 	
 };
 

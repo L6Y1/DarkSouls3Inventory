@@ -63,5 +63,6 @@ void UMenuTopType1::Init(FMenuTopType1Attr MenuTopType1Attr)
 		}
 	);
 	
-	// TODO : init MenuButtons and QuickBar
+	// TODO : init NavButtons and QuickBar
+	
 }

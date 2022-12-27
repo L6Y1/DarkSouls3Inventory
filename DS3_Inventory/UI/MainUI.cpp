@@ -61,9 +61,14 @@ void UMainUI::ToggleMenuTop()
 				MenuTopSlot->AddChild(MenuTopWidget);
 			}
 		);
+
+		this->GetOwningPlayer()->SetInputMode(FInputModeGameAndUI());
+		this->GetOwningPlayer()->SetShowMouseCursor(true);
 	}
 	else
 	{
 		MenuTopSlot->ClearChildren();
+		this->GetOwningPlayer()->SetInputMode(FInputModeGameOnly());
+		this->GetOwningPlayer()->SetShowMouseCursor(false);
 	}
 }

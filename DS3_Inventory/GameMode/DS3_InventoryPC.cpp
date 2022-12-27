@@ -44,4 +44,5 @@ void ADS3_InventoryPC::SetupInputComponent()
 void ADS3_InventoryPC::ToggleMenuTop()
 {
 	FGlobalEventManager::TriggerEvent(FName("ToggleMenuTopEvent"), nullptr);
+	
 }

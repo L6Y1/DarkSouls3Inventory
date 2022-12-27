@@ -23,7 +23,9 @@ class FDataTableTool
 	
 private:
 	static UDataTable *DT_MenuTopType1Attr;
+	static UDataTable *DT_NavButtonAttr;
 	
 public:
 	static FMenuTopType1Attr *GetMenuTopType1Attr(FName RowName);
+	static FNavButtonAttr *GetNavButtonAttr(FName RowName);
 };
