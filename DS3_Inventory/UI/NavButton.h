@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "DS3_Inventory/Utils/UIManager/UIState.h"
 #include "NavButton.generated.h"
 
 class UTextBlock;

@@ -4,6 +4,7 @@
 #include "DS3_InventoryPC.h"
 #include "Blueprint/UserWidget.h"
 #include "DS3_Inventory/Utils/GlobalEventManager/GlobalEventManager.h"
+#include "DS3_Inventory/Utils/UIManager/UIManagerComponent.h"
 #include "GameFramework/PlayerInput.h"
 
 ADS3_InventoryPC::ADS3_InventoryPC()
@@ -14,6 +15,8 @@ ADS3_InventoryPC::ADS3_InventoryPC()
 	{
 		MainUIClass = MainUIClassFinder.Class;
 	}
+
+	UIManagerComponent = CreateDefaultSubobject<UUIManagerComponent>(FName("UIManagerComp"));
 }
 
 void ADS3_InventoryPC::BeginPlay()
@@ -30,7 +33,7 @@ void ADS3_InventoryPC::BeginPlay()
 		MainUIWidget->ProcessEvent(FuncPtr, nullptr);
 	}
 	
-	MainUIWidget->AddToViewport();
+	UIManagerComponent->PushState(MainUIWidget);
 }
 
 void ADS3_InventoryPC::SetupInputComponent()

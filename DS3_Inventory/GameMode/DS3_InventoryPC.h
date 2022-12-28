@@ -6,6 +6,7 @@
 #include "GameFramework/PlayerController.h"
 #include "DS3_InventoryPC.generated.h"
 
+class UUIManagerComponent;
 /**
  * 
  */
@@ -19,7 +20,7 @@ private:
 
 	UUserWidget *MainUIWidget;
 
-	
+
 	ADS3_InventoryPC();
 
 public:
@@ -27,7 +28,8 @@ public:
 
 	virtual void SetupInputComponent() override;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UUIManagerComponent * UIManagerComponent;
 
-	
 	void ToggleMenuTop();
 };

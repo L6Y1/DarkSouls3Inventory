@@ -68,34 +68,6 @@ void ADS3_InventoryCharacter::SetupPlayerInputComponent(class UInputComponent* P
 	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
 	PlayerInputComponent->BindAxis("LookUpRate", this, &ADS3_InventoryCharacter::LookUpAtRate);
 
-	// handle touch devices
-	PlayerInputComponent->BindTouch(IE_Pressed, this, &ADS3_InventoryCharacter::TouchStarted);
-	PlayerInputComponent->BindTouch(IE_Released, this, &ADS3_InventoryCharacter::TouchStopped);
-
-	// VR headset functionality
-	PlayerInputComponent->BindAction("ResetVR", IE_Pressed, this, &ADS3_InventoryCharacter::OnResetVR);
-}
-
-
-void ADS3_InventoryCharacter::OnResetVR()
-{
-	// If DS3_Inventory is added to a project via 'Add Feature' in the Unreal Editor the dependency on HeadMountedDisplay in DS3_Inventory.Build.cs is not automatically propagated
-	// and a linker error will result.
-	// You will need to either:
-	//		Add "HeadMountedDisplay" to [YourProject].Build.cs PublicDependencyModuleNames in order to build successfully (appropriate if supporting VR).
-	// or:
-	//		Comment or delete the call to ResetOrientationAndPosition below (appropriate if not supporting VR)
-	UHeadMountedDisplayFunctionLibrary::ResetOrientationAndPosition();
-}
-
-void ADS3_InventoryCharacter::TouchStarted(ETouchIndex::Type FingerIndex, FVector Location)
-{
-		Jump();
-}
-
-void ADS3_InventoryCharacter::TouchStopped(ETouchIndex::Type FingerIndex, FVector Location)
-{
-		StopJumping();
 }
 
 void ADS3_InventoryCharacter::TurnAtRate(float Rate)

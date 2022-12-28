@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "DS3_Inventory/Utils/UIManager/UIState.h"
 #include "UMG/Public/Blueprint/UserWidget.h"
 #include "MainUI.generated.h"
 
@@ -10,7 +11,7 @@
  * 
  */
 UCLASS()
-class DS3_INVENTORY_API UMainUI : public UUserWidget
+class DS3_INVENTORY_API UMainUI : public UUIState
 {
 	GENERATED_BODY()
 
