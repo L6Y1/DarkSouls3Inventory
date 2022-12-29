@@ -25,11 +25,13 @@ private:
 
 public:
 	virtual void BeginPlay() override;
-
 	virtual void SetupInputComponent() override;
 
+	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	UUIManagerComponent * UIManagerComponent;
-
+	
 	void ToggleMenuTop();
+	void ReturnToFormerUI();
+	void ReturnToMainUI();
 };

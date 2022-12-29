@@ -3,6 +3,8 @@
 
 #include "DS3_InventoryPC.h"
 #include "Blueprint/UserWidget.h"
+#include "DS3_Inventory/UI/MenuTopType1.h"
+#include "DS3_Inventory/UI/NavButton.h"
 #include "DS3_Inventory/Utils/GlobalEventManager/GlobalEventManager.h"
 #include "DS3_Inventory/Utils/UIManager/UIManagerComponent.h"
 #include "GameFramework/PlayerInput.h"
@@ -40,12 +42,29 @@ void ADS3_InventoryPC::SetupInputComponent()
 {
 	Super::SetupInputComponent();
 	UPlayerInput::AddEngineDefinedActionMapping(FInputActionKeyMapping(FName("ToggleMenuTop"), EKeys::Tab));
+	UPlayerInput::AddEngineDefinedActionMapping(FInputActionKeyMapping(FName("ReturnToFormerUI"), EKeys::Q));
+	UPlayerInput::AddEngineDefinedActionMapping(FInputActionKeyMapping(FName("ReturnToMainUI"), EKeys::Q, true));
 
 	InputComponent->BindAction(FName("ToggleMenuTop"), IE_Pressed, this, &ADS3_InventoryPC::ToggleMenuTop);
+	InputComponent->BindAction(FName("ReturnToFormerUI"), IE_Pressed, this, &ADS3_InventoryPC::ReturnToFormerUI);
+	InputComponent->BindAction(FName("ReturnToMainUI"), IE_Pressed, this, &ADS3_InventoryPC::ReturnToMainUI);
 }
 
 void ADS3_InventoryPC::ToggleMenuTop()
 {
 	FGlobalEventManager::TriggerEvent(FName("ToggleMenuTopEvent"), nullptr);
 	
+}
+
+void ADS3_InventoryPC::ReturnToFormerUI()
+{
+	if (UIManagerComponent->StateCount() > 1)
+	{
+		UIManagerComponent->PopState();
+	}
+}
+
+void ADS3_InventoryPC::ReturnToMainUI()
+{
+	UIManagerComponent->PopStates(UIManagerComponent->StateCount() - 1);
 }

@@ -28,7 +28,7 @@ FNavButtonAttr * FDataTableTool::GetNavButtonAttr(FName RowName)
 {
 	if (!DT_NavButtonAttr)
 	{
-		DT_NavButtonAttr = LoadObject<UDataTable>(nullptr, TEXT("DataTable'/Game/DataTables/DT_MenuTopType1Attr.DT_MenuTopType1Attr'"));
+		DT_NavButtonAttr = LoadObject<UDataTable>(nullptr, TEXT("DataTable'/Game/DataTables/DT_NavButtonAttr.DT_NavButtonAttr'"));
 		check(DT_NavButtonAttr);
 	}
 

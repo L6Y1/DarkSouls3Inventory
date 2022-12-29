@@ -25,6 +25,9 @@ public:
 	FNavButtonAttr() {}
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FName ButtonLayoutStyle;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FVector2D ButtonSize;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -62,10 +65,10 @@ public:
 	FName ItemSelectImage;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FName NavButtonStyle;
+	FName NavButtonType;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FName QuickBarStyle;
+	FName QuickBarType;
 
 	
 };

@@ -10,7 +10,7 @@ void UUIState::EnterState(EStackAction StackAction)
 
 void UUIState::ExitState(EStackAction StackAction)
 {
-	ExitState(StackAction);
+	ReceiveExitState(StackAction);
 }
 
 void UUIState::UpdateState(float DeltaTime)

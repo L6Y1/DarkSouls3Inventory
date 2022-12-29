@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "DS3_Inventory/Utils/UIManager/UIState.h"
+#include "DS3_Inventory/Utils/StructTypes.h"
 #include "NavButton.generated.h"
 
 class UTextBlock;
@@ -20,7 +20,7 @@ class DS3_INVENTORY_API UNavButton : public UUserWidget
 	GENERATED_BODY()
 
 private:
-	virtual void NativeConstruct() override;
+	FName Name;
 	
 public:
 	UPROPERTY(meta=(BindWidget), BlueprintReadOnly)
@@ -36,9 +36,18 @@ public:
 
 
 public:
+	virtual void NativeConstruct() override;
+
+	
 	UFUNCTION()
 	void ToggleHoveredPic();
 
 	UFUNCTION()
-	void Init();
+	void ShowMenuTopHint();
+	
+	UFUNCTION()
+	void HideMenuTopHint();
+	
+	UFUNCTION()
+	void Init(FName ButtonName, FNavButtonAttr NavButtonAttr);
 };

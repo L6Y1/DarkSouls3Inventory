@@ -20,6 +20,10 @@ class DS3_INVENTORY_API UMenuTopType1 : public UUserWidget
 {
 	GENERATED_BODY()
 
+protected:
+	virtual void NativeConstruct() override;
+	virtual void NativeDestruct() override;
+	
 public:
 	// widgets
 	UPROPERTY(meta=(BindWidget), VisibleAnywhere, BlueprintReadOnly)
@@ -51,7 +55,7 @@ public:
 
 	UFUNCTION()
 	void Init(FMenuTopType1Attr MenuTopType1Attr);
+
+	UFUNCTION()
+	void UpdateHint(FName Name, bool bShouldShow, bool bIsMenu);
 };
-
-
-
