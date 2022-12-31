@@ -30,19 +30,34 @@ void UMenuTopType1::NativeDestruct()
 	FGlobalEventManager::UnRegisterEvent(FName("UpdateHintEvent"), this);
 }
 
+void UMenuTopType1::ReceiveEnterState_Implementation(EStackAction StackAction)
+{
+	Super::ReceiveEnterState_Implementation(StackAction);
+	if (StackAction == Push)
+	{
+		this->GetOwningPlayer()->SetInputMode(FInputModeGameAndUI());
+		this->GetOwningPlayer()->SetShowMouseCursor(true);
+	}
+}
+
+void UMenuTopType1::ReceiveExitState_Implementation(EStackAction StackAction)
+{
+	Super::ReceiveExitState_Implementation(StackAction);
+	if (StackAction == Pop)
+	{
+		GetOwningPlayer()->SetInputMode(FInputModeGameOnly());
+		GetOwningPlayer()->SetShowMouseCursor(false);
+	}
+}
+
 void UMenuTopType1::Init(FMenuTopType1Attr MenuTopType1Attr)
 {
 	// init MenuTop
 	MenuTopSizeBox->WidthOverride = MenuTopType1Attr.WidgetSize.X;
 	MenuTopSizeBox->HeightOverride = MenuTopType1Attr.WidgetSize.Y;
 
-	MenuTopBGBorder->SetVisibility(ESlateVisibility::Collapsed);
+	this->SetVisibility(ESlateVisibility::Collapsed);
 	
-	MenuSelectImage->SetVisibility(ESlateVisibility::Collapsed);
-	ItemSelectImage->SetVisibility(ESlateVisibility::Collapsed);
-
-	MenuSelectText->SetVisibility(ESlateVisibility::Collapsed);
-	ItemSelectText->SetVisibility(ESlateVisibility::Collapsed);
 	MenuSelectText->Font.Size = 10;
 	ItemSelectText->Font.Size = 10;
 
@@ -123,19 +138,27 @@ void UMenuTopType1::Init(FMenuTopType1Attr MenuTopType1Attr)
 		});
 		
 	}
-
+	
 
 	// TODO : init QuickBar
+
+
+	this->SetVisibility(ESlateVisibility::Visible);
 	
+	ItemSelectImage->SetVisibility(ESlateVisibility::Collapsed);
+	ItemSelectText->SetVisibility(ESlateVisibility::Collapsed);
+	MenuSelectImage->SetVisibility(ESlateVisibility::Collapsed);
+	MenuSelectText->SetVisibility(ESlateVisibility::Collapsed);
 }
 
 void UMenuTopType1::UpdateHint(FName Name, bool bShouldShow, bool bIsMenu)
 {
+	auto NameStr = Name.ToString().Replace(TEXT("Button"), TEXT(""));
 	if (bIsMenu)
 	{
 		if (bShouldShow)
 		{
-			MenuSelectText->SetText(FText::FromName(Name));
+			MenuSelectText->SetText(FText::FromString(NameStr));
 			MenuSelectText->SetVisibility(ESlateVisibility::Visible);
 			MenuSelectImage->SetVisibility(ESlateVisibility::Visible);
 		}
@@ -150,7 +173,7 @@ void UMenuTopType1::UpdateHint(FName Name, bool bShouldShow, bool bIsMenu)
 	{
 		if (bShouldShow)
 		{
-			ItemSelectText->SetText(FText::FromName(Name));
+			ItemSelectText->SetText(FText::FromString(NameStr));
 			ItemSelectText->SetVisibility(ESlateVisibility::Visible);
 			ItemSelectImage->SetVisibility(ESlateVisibility::Visible);
 		}

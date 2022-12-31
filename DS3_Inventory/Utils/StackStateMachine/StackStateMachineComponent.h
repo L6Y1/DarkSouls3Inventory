@@ -90,7 +90,7 @@ public:
 	TScriptInterface<IStackStateInterface> GetCurrentState() { return States[StateCount() - 1]; }
 
 	UFUNCTION(BlueprintPure, Category = "StackStateMachine")
-	TScriptInterface<IStackStateInterface> GetUnderState() { return States[StateCount() - 2]; }
+	TScriptInterface<IStackStateInterface> GetUnderState() { return StateCount() - 2 >= 0 ? States[StateCount() - 2] : nullptr ; }
 	
 	UFUNCTION(BlueprintPure, Category = "StackStateMachine")
 	TScriptInterface<IStackStateInterface> GetState(int Index) { return States[Index]; }

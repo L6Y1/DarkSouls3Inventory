@@ -24,8 +24,9 @@ class FDataTableTool
 private:
 	static UDataTable *DT_MenuTopType1Attr;
 	static UDataTable *DT_NavButtonAttr;
-	
+	static UDataTable *DT_FullScreenDisplayType1Attr;
 public:
 	static FMenuTopType1Attr *GetMenuTopType1Attr(FName RowName);
 	static FNavButtonAttr *GetNavButtonAttr(FName RowName);
+	static FFullScreenDisplayType1Attr *GetFullScreenDisplayType1Attr(FName RowName);
 };

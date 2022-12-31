@@ -7,6 +7,7 @@
 
 UDataTable *FDataTableTool::DT_MenuTopType1Attr = nullptr;
 UDataTable *FDataTableTool::DT_NavButtonAttr = nullptr;
+UDataTable *FDataTableTool::DT_FullScreenDisplayType1Attr = nullptr;
 
 FMenuTopType1Attr * FDataTableTool::GetMenuTopType1Attr(FName RowName)
 {
@@ -35,6 +36,22 @@ FNavButtonAttr * FDataTableTool::GetNavButtonAttr(FName RowName)
 	if (DT_NavButtonAttr->GetRowMap().Contains(RowName))
 	{
 		auto Result = DT_NavButtonAttr->FindRow<FNavButtonAttr>(RowName, TEXT("None"), true);
+		return Result;
+	}
+	return nullptr;
+}
+
+FFullScreenDisplayType1Attr * FDataTableTool::GetFullScreenDisplayType1Attr(FName RowName)
+{
+	if (!DT_FullScreenDisplayType1Attr)
+	{
+		DT_FullScreenDisplayType1Attr = LoadObject<UDataTable>(nullptr, TEXT("DataTable'/Game/DataTables/DT_FullScreenDisplayType1Attr.DT_FullScreenDisplayType1Attr'"));
+		check(DT_FullScreenDisplayType1Attr);
+	}
+
+	if (DT_FullScreenDisplayType1Attr->GetRowMap().Contains(RowName))
+	{
+		auto Result = DT_FullScreenDisplayType1Attr->FindRow<FFullScreenDisplayType1Attr>(RowName, TEXT("None"), true);
 		return Result;
 	}
 	return nullptr;

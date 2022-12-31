@@ -3,9 +3,11 @@
 
 #include "MainUI.h"
 #include "Components/NamedSlot.h"
+#include "DS3_Inventory/GameMode/DS3_InventoryPC.h"
 #include "DS3_Inventory/Utils/DataAssetMananger/DataAssetMananger.h"
 #include "DS3_Inventory/Utils/DataTableTool/DataTableTool.h"
 #include "DS3_Inventory/Utils/GlobalEventManager/GlobalEventManager.h"
+#include "DS3_Inventory/Utils/UIManager/UIManagerComponent.h"
 
 
 void UMainUI::NativeConstruct()
@@ -27,7 +29,7 @@ void UMainUI::Init()
 
 void UMainUI::ToggleMenuTop()
 {
-	if (!MenuTopSlot->HasAnyChildren())
+	if (Cast<ADS3_InventoryPC>(GetOwningPlayer())->UIManagerComponent->GetCurrentState() == this)
 	{
 		FString MenuTopTypeStr;
 		GConfig->GetString(
@@ -58,17 +60,13 @@ void UMainUI::ToggleMenuTop()
 				{
 					MenuTopWidget->ProcessEvent(FuncPtr, MenuTopType1Attr);
 				}
-				MenuTopSlot->AddChild(MenuTopWidget);
+
+				Cast<ADS3_InventoryPC>(GetOwningPlayer())->UIManagerComponent->PushState(MenuTopWidget);
 			}
 		);
-
-		this->GetOwningPlayer()->SetInputMode(FInputModeGameAndUI());
-		this->GetOwningPlayer()->SetShowMouseCursor(true);
 	}
 	else
 	{
-		MenuTopSlot->ClearChildren();
-		this->GetOwningPlayer()->SetInputMode(FInputModeGameOnly());
-		this->GetOwningPlayer()->SetShowMouseCursor(false);
+		Cast<ADS3_InventoryPC>(GetOwningPlayer())->UIManagerComponent->PopState();
 	}
 }

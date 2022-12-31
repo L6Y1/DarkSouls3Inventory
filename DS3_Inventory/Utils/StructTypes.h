@@ -35,9 +35,12 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FName HoveredImage;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FName ToggledFullScreenWidgetClass;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FName ToggledWidgetClass;
+	TArray<FName> ToggledFullScreenWidgetPartsClass;
 	
 	
 	
@@ -71,4 +74,31 @@ public:
 	FName QuickBarType;
 
 	
+};
+
+USTRUCT(BlueprintType)
+struct FFullScreenDisplayType1Attr : public FTableRowBase
+{
+	GENERATED_BODY()
+
+public:
+	FFullScreenDisplayType1Attr() {}
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FName TitleBGImage;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FVector2D TitleImageSize;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FName TitleImage;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FName TitleText;	
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FName FooterBGImage;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FName MenuBaseImage;
 };

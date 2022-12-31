@@ -21,6 +21,7 @@ class DS3_INVENTORY_API UNavButton : public UUserWidget
 
 private:
 	FName Name;
+	FNavButtonAttr SelfAttr;
 	
 public:
 	UPROPERTY(meta=(BindWidget), BlueprintReadOnly)
@@ -47,6 +48,9 @@ public:
 	
 	UFUNCTION()
 	void HideMenuTopHint();
+
+	UFUNCTION()
+	void NativeOnClick();
 	
 	UFUNCTION()
 	void Init(FName ButtonName, FNavButtonAttr NavButtonAttr);

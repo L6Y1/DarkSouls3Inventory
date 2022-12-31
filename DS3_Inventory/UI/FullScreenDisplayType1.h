@@ -6,59 +6,55 @@
 #include "Blueprint/UserWidget.h"
 #include "DS3_Inventory/Utils/StructTypes.h"
 #include "DS3_Inventory/Utils/UIManager/UIState.h"
-#include "MenuTopType1.generated.h"
+#include "FullScreenDisplayType1.generated.h"
 
-class UHorizontalBox;
 class UTextBlock;
-class UImage;
-class UBorder;
 class USizeBox;
+class UImage;
 /**
  * 
  */
 UCLASS()
-class DS3_INVENTORY_API UMenuTopType1 : public UUIState
+class DS3_INVENTORY_API UFullScreenDisplayType1 : public UUIState
 {
 	GENERATED_BODY()
+	
+private:
 
-protected:
+
+public:
 	virtual void NativeConstruct() override;
-	virtual void NativeDestruct() override;
 
-	virtual void ReceiveEnterState_Implementation(EStackAction StackAction) override;
-	virtual void ReceiveExitState_Implementation(EStackAction StackAction) override;
 public:
-	// widgets
 	UPROPERTY(meta=(BindWidget), VisibleAnywhere, BlueprintReadOnly)
-	USizeBox *MenuTopSizeBox;
+	UImage *TitleBGImage;
 
 	UPROPERTY(meta=(BindWidget), VisibleAnywhere, BlueprintReadOnly)
-	UBorder *MenuTopBGBorder;
+	USizeBox *TitleImageSizeBox;
 
 	UPROPERTY(meta=(BindWidget), VisibleAnywhere, BlueprintReadOnly)
-	UImage *MenuSelectImage;
+	UImage *TitleImage;
 
 	UPROPERTY(meta=(BindWidget), VisibleAnywhere, BlueprintReadOnly)
-	UImage *ItemSelectImage;
-
-	UPROPERTY(meta=(BindWidget), VisibleAnywhere, BlueprintReadOnly)
-	UTextBlock *MenuSelectText;
-
-	UPROPERTY(meta=(BindWidget), VisibleAnywhere, BlueprintReadOnly)
-	UTextBlock *ItemSelectText;
-
-	UPROPERTY(meta=(BindWidget), VisibleAnywhere, BlueprintReadOnly)
-	UHorizontalBox *MenuHorBox;
+	UTextBlock *TitleText;
 	
 	UPROPERTY(meta=(BindWidget), VisibleAnywhere, BlueprintReadOnly)
-	UNamedSlot *QuickBarSlot;
+	UImage *FooterBGImage;
+
+	UPROPERTY(meta=(BindWidget), VisibleAnywhere, BlueprintReadOnly)
+	UImage *MenuBaseImage;
+
+	UPROPERTY(meta=(BindWidget), VisibleAnywhere, BlueprintReadOnly)
+	UNamedSlot *SlotLeft;
 	
+	UPROPERTY(meta=(BindWidget), VisibleAnywhere, BlueprintReadOnly)
+	UNamedSlot *SlotMiddle;
+
+	UPROPERTY(meta=(BindWidget), VisibleAnywhere, BlueprintReadOnly)
+	UNamedSlot *SlotRight;
+
+
 public:
-	
-
 	UFUNCTION()
-	void Init(FMenuTopType1Attr MenuTopType1Attr);
-
-	UFUNCTION()
-	void UpdateHint(FName Name, bool bShouldShow, bool bIsMenu);
+	void Init(FFullScreenDisplayType1Attr FullScreenDisplayType1Attr, TArray<FName> WidgetPartsClassName);
 };

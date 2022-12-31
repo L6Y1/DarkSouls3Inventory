@@ -3,9 +3,9 @@
 
 #include "DS3_InventoryPC.h"
 #include "Blueprint/UserWidget.h"
-#include "DS3_Inventory/UI/MenuTopType1.h"
 #include "DS3_Inventory/UI/NavButton.h"
 #include "DS3_Inventory/Utils/GlobalEventManager/GlobalEventManager.h"
+#include "DS3_Inventory/Utils/UIManager/UIState.h"
 #include "DS3_Inventory/Utils/UIManager/UIManagerComponent.h"
 #include "GameFramework/PlayerInput.h"
 
@@ -27,7 +27,7 @@ void ADS3_InventoryPC::BeginPlay()
 	
 	// create main ui
 	checkf(MainUIClass, TEXT("MainUIClass not found, check file path"));
-	MainUIWidget = CreateWidget(this, MainUIClass);
+	MainUIWidget = CreateWidget<UUIState>(this, MainUIClass);
 
 	const auto FuncPtr = MainUIWidget->FindFunction(FName("Init"));
 	if (FuncPtr)
@@ -52,8 +52,10 @@ void ADS3_InventoryPC::SetupInputComponent()
 
 void ADS3_InventoryPC::ToggleMenuTop()
 {
-	FGlobalEventManager::TriggerEvent(FName("ToggleMenuTopEvent"), nullptr);
-	
+	if (UIManagerComponent->StateCount() <= 2)
+	{
+		FGlobalEventManager::TriggerEvent(FName("ToggleMenuTopEvent"), nullptr);
+	}
 }
 
 void ADS3_InventoryPC::ReturnToFormerUI()
