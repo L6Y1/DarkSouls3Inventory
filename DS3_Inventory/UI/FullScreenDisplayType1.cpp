@@ -9,15 +9,22 @@
 #include "Components/SizeBox.h"
 #include "Components/TextBlock.h"
 #include "DS3_Inventory/Utils/DataAssetMananger/DataAssetMananger.h"
+#include "DS3_Inventory/Utils/DataTableTool/DataTableTool.h"
+
+
+#define DataTableSearch(WidgetName, Param)\
+auto *Attr = FDataTableTool::Get##WidgetName##(Param);
+
+
 
 void UFullScreenDisplayType1::NativeConstruct()
 {
 	Super::NativeConstruct();
-	this->SetVisibility(ESlateVisibility::Collapsed);
 }
 
 void UFullScreenDisplayType1::Init(FFullScreenDisplayType1Attr FullScreenDisplayType1Attr, TArray<FName> WidgetPartsClassName)
 {
+	this->SetVisibility(ESlateVisibility::Collapsed);
 	TitleImageSizeBox->SetWidthOverride(FullScreenDisplayType1Attr.TitleImageSize.X);
 	TitleImageSizeBox->SetHeightOverride(FullScreenDisplayType1Attr.TitleImageSize.Y);
 
@@ -74,51 +81,43 @@ void UFullScreenDisplayType1::Init(FFullScreenDisplayType1Attr FullScreenDisplay
 	);
 	
 	TArray<UUserWidget*> Widgets;
-
-	// temp init for inventory widget
+	TArray<FString> SkinTypes;
+	// TODO : init the 3 widget part individually
+	
+	// helper string to get SkinType
+	const FString SkinTypeConfigSectionPrefix = FString("GameUIInit/ItemParts/");
+	const FString SkinTypeKeyPostfix = FString("SkinType");
+	
 	for (auto WidgetPartClassName : WidgetPartsClassName)
 	{
+		// get SkinType
+		FString OutSkinType;
+		
+		FString ConfigSection = SkinTypeConfigSectionPrefix + WidgetPartClassName.ToString();
+		FString SkinTypeKey = WidgetPartClassName.ToString() + SkinTypeKeyPostfix;		
+		GConfig->GetString(
+			*ConfigSection,
+			*SkinTypeKey,
+			OutSkinType,
+			GGameIni
+		);
+		SkinTypes.Add(OutSkinType);
+		
 		auto *WidgetPartClass = ADataAssetMananger::RequestSyncLoadClass(this, WidgetPartClassName);
 		auto *Widget = CreateWidget<UUserWidget>(GetOwningPlayer(), WidgetPartClass);
 		Widgets.Add(Widget);
 	}
+
+	auto *InventoryAttr = FDataTableTool::GetInventoryType1Attr(FName(SkinTypes[0]));
 	
+	auto *FuncPtr = Widgets[0]->FindFunction(FName("Init"));
+	if (FuncPtr)
+	{
+		Widgets[0]->ProcessEvent(FuncPtr, InventoryAttr);
+	}
+
+	// add 3 widgets to corresponding slot
 	SlotLeft->AddChild(Widgets[0]);
 	SlotMiddle->AddChild(Widgets[1]);
 	SlotRight->AddChild(Widgets[2]);
-	
-
-	// TODO : init the 3 widget part individually
-	
-	// // helper string to get SkinType
-	// const FString SkinTypeConfigSectionPrefix = FString("GameUIInit/ItemParts/");
-	// const FString SkinTypeKeyPostfix = FString("SkinType");
-	//
-	// // init 3 widget individually
-	// for (auto WidgetPartClassName : WidgetPartsClassName)
-	// {
-	// 	// get SkinType
-	// 	FString OutSkinType;
-	// 	
-	// 	FString ConfigSection = SkinTypeConfigSectionPrefix + WidgetPartClassName.ToString();
-	// 	FString SkinTypeKey = WidgetPartClassName.ToString() + SkinTypeKeyPostfix;		
-	// 	GConfig->GetString(
-	// 		*ConfigSection,
-	// 		*SkinTypeKey,
-	// 		OutSkinType,
-	// 		GGameIni
-	// 	);
-	//
-	// 	// load widget class
-	// 	ADataAssetMananger::RequestAsyncLoadClass(this, WidgetPartClassName, [this](UClass *ClassAsset)
-	// 	{
-	// 		auto *Widget = CreateWidget<UUIState>(this->GetOwningPlayer(), ClassAsset);
-	// 		
-	// 		auto *FuncPtr= Widget->FindFunction(FName("Init"));
-	// 		if (FuncPtr)
-	// 		{
-	// 			Widget->ProcessEvent(FuncPtr, nullptr);
-	// 		}
-	// 	});
-	// }
 }

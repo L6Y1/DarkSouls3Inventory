@@ -16,6 +16,37 @@ class DS3_INVENTORY_API UStructTypes : public UObject
 	
 };
 
+
+UENUM(BlueprintType)
+enum ItemClassification { Consumables, Equipment, Important, Keys, Rings, Arrows, ENUM_END };
+
+
+USTRUCT(BlueprintType)
+struct FInventoryType1Attr : public FTableRowBase
+{
+	GENERATED_BODY()
+	
+public:
+	FInventoryType1Attr() {}
+
+	// size of the full inventory widget
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FVector2D InventorySize;
+
+	// size of the inventory item background image
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FVector2D InventoryBaseImageSize;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FName InventoryBaseImage;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FName SortCardWidgetClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FName ItemGridWidgetClass;
+};
+
 USTRUCT(BlueprintType)
 struct FNavButtonAttr : public FTableRowBase
 {

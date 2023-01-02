@@ -64,8 +64,8 @@ void UNavButton::NativeOnClick()
 {
 	FString FullScreenDisplaySkinType;
 	GConfig->GetString(
-		TEXT("GameUIInit/FullScreenDisplayType1"),
-		TEXT("FullScreenDisplaySkinType"),
+		TEXT("GameUIInit/FullScreenDisplayWidgetType1"),
+		TEXT("FullScreenDisplayWidgetType1SkinType"),
 		FullScreenDisplaySkinType,
 		GGameIni
 	);
