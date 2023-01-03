@@ -31,7 +31,7 @@ public:
 	USizeBox *InventorySizeBox;
 
 	UPROPERTY(meta=(BindWidget), VisibleAnywhere, BlueprintReadOnly)
-	UNamedSlot *SortCardSlot;
+	UNamedSlot *SortCardsSlot;
 
 	UPROPERTY(meta=(BindWidget), VisibleAnywhere, BlueprintReadOnly)
 	USizeBox *InventoryBaseSizeBox;

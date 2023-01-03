@@ -9,6 +9,7 @@ UDataTable *FDataTableTool::DT_MenuTopType1Attr = nullptr;
 UDataTable *FDataTableTool::DT_NavButtonAttr = nullptr;
 UDataTable *FDataTableTool::DT_FullScreenDisplayType1Attr = nullptr;
 UDataTable *FDataTableTool::DT_InventoryType1Attr = nullptr;
+UDataTable *FDataTableTool::DT_SortCardsType1Attr = nullptr;
 
 FMenuTopType1Attr * FDataTableTool::GetMenuTopType1Attr(FName RowName)
 {
@@ -69,6 +70,22 @@ FInventoryType1Attr * FDataTableTool::GetInventoryType1Attr(FName RowName)
 	if (DT_InventoryType1Attr->GetRowMap().Contains(RowName))
 	{
 		auto Result = DT_InventoryType1Attr->FindRow<FInventoryType1Attr>(RowName, TEXT("None"), true);
+		return Result;
+	}
+	return nullptr;
+}
+
+FSortCardsType1Attr * FDataTableTool::GetSortCardsType1Attr(FName RowName)
+{
+	if (!DT_SortCardsType1Attr)
+	{
+		DT_SortCardsType1Attr = LoadObject<UDataTable>(nullptr, TEXT("DataTable'/Game/DataTables/DT_SortCardsType1Attr.DT_SortCardsType1Attr'"));
+		check(DT_SortCardsType1Attr);
+	}
+
+	if (DT_SortCardsType1Attr->GetRowMap().Contains(RowName))
+	{
+		auto Result = DT_SortCardsType1Attr->FindRow<FSortCardsType1Attr>(RowName, TEXT("None"), true);
 		return Result;
 	}
 	return nullptr;

@@ -18,7 +18,39 @@ class DS3_INVENTORY_API UStructTypes : public UObject
 
 
 UENUM(BlueprintType)
-enum ItemClassification { Consumables, Equipment, Important, Keys, Rings, Arrows, ENUM_END };
+enum ItemClassification { ENUM_START, Consumables = ENUM_START, Equipment, Important, Keys, Rings, Arrows, ENUM_END };
+
+// #define IntToClassification(num) static_cast<ItemClassification>(num)
+
+USTRUCT(BlueprintType)
+struct FSortCardsType1Attr : public FTableRowBase
+{
+	GENERATED_BODY()
+
+public:
+	FSortCardsType1Attr() {}
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FVector2D SortCardsSize;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FVector2D CardContainerSize;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FName LeftButtonImage;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FName RightButtonImage;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FName SortCardType;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int SortCardNum;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TMap<TEnumAsByte<ItemClassification>, FName> CardImage;
+};
 
 
 USTRUCT(BlueprintType)
@@ -46,6 +78,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FName ItemGridWidgetClass;
 };
+
 
 USTRUCT(BlueprintType)
 struct FNavButtonAttr : public FTableRowBase

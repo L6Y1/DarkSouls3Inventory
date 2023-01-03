@@ -4,9 +4,11 @@
 #include "InventoryType1.h"
 #include "PaperSprite.h"
 #include "Components/Image.h"
+#include "Components/NamedSlot.h"
 #include "Components/SizeBox.h"
 #include "Components/TextBlock.h"
 #include "DS3_Inventory/Utils/DataAssetMananger/DataAssetMananger.h"
+#include "DS3_Inventory/Utils/DataTableTool/DataTableTool.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Slate/SlateTextureAtlasInterface.h"
 
@@ -14,6 +16,8 @@
 void UInventoryType1::NativeConstruct()
 {
 	Super::NativeConstruct();
+	// UKismetSystemLibrary::PrintString(nullptr, "Inventory Construct");
+
 }
 
 void UInventoryType1::NativeDestruct()
@@ -45,17 +49,31 @@ void UInventoryType1::Init(FInventoryType1Attr InventoryAttr)
 	});
 	InventoryBaseImage->SetVisibility(ESlateVisibility::Visible);
 
+	
 	// TODO : init SortCards and ItemGrids here
+	auto *SortCardsAttr = FDataTableTool::GetSortCardsType1Attr(FName("SkinType1"));
+	ADataAssetMananger::RequestAsyncLoadClass(this, InventoryAttr.SortCardWidgetClass, [this, SortCardsAttr](UClass *ClassAsset)
+	{
+		auto *SortCardsWidget = CreateWidget(GetOwningPlayer(), ClassAsset);
+		auto *FuncPtr = SortCardsWidget->FindFunction(FName("Init"));
+		if (FuncPtr)
+		{
+			SortCardsWidget->ProcessEvent(FuncPtr, SortCardsAttr);
+		}
+		SortCardsSlot->AddChild(SortCardsWidget);
+	});
+	// UKismetSystemLibrary::PrintString(nullptr, "Inventory INIT()");
+
 }
 
 FReply UInventoryType1::NativeOnFocusReceived(const FGeometry &InGeometry, const FFocusEvent &InFocusEvent)
 {
-	UKismetSystemLibrary::PrintString(nullptr, "Focus");
+	// UKismetSystemLibrary::PrintString(nullptr, "Focus");
 	return Super::NativeOnFocusReceived(InGeometry, InFocusEvent);
 }
 
 void UInventoryType1::NativeOnFocusLost(const FFocusEvent &InFocusEvent)
 {
-	UKismetSystemLibrary::PrintString(nullptr, "FocusLost");
+	// UKismetSystemLibrary::PrintString(nullptr, "FocusLost");
 	Super::NativeOnFocusLost(InFocusEvent);
 }

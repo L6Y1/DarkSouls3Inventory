@@ -10,6 +10,7 @@
 #include "Components/TextBlock.h"
 #include "DS3_Inventory/Utils/DataAssetMananger/DataAssetMananger.h"
 #include "DS3_Inventory/Utils/DataTableTool/DataTableTool.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 
 #define DataTableSearch(WidgetName, Param)\
@@ -20,6 +21,8 @@ auto *Attr = FDataTableTool::Get##WidgetName##(Param);
 void UFullScreenDisplayType1::NativeConstruct()
 {
 	Super::NativeConstruct();
+	// UKismetSystemLibrary::PrintString(nullptr, "FullScreen Construct");
+
 }
 
 void UFullScreenDisplayType1::Init(FFullScreenDisplayType1Attr FullScreenDisplayType1Attr, TArray<FName> WidgetPartsClassName)
@@ -120,4 +123,6 @@ void UFullScreenDisplayType1::Init(FFullScreenDisplayType1Attr FullScreenDisplay
 	SlotLeft->AddChild(Widgets[0]);
 	SlotMiddle->AddChild(Widgets[1]);
 	SlotRight->AddChild(Widgets[2]);
+
+	// UKismetSystemLibrary::PrintString(nullptr, "FullScreen INIT()");
 }
