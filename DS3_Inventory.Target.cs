@@ -10,5 +10,6 @@ public class DS3_InventoryTarget : TargetRules
 		Type = TargetType.Game;
 		DefaultBuildSettings = BuildSettingsVersion.V2;
 		ExtraModuleNames.Add("DS3_Inventory");
+		WindowsPlatform.PCHMemoryAllocationFactor = 2000;
 	}
 }
