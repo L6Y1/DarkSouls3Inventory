@@ -52,7 +52,7 @@ void USortCard::NativeOnMouseEnter(const FGeometry &InGeometry, const FPointerEv
 
 
 
-void USortCard::Init(TEnumAsByte<ItemClassification> Index, FName ImageName)
+void USortCard::Init(TEnumAsByte<EItemClassification> Index, FName ImageName)
 {
 	this->CardIndex = Index;
 	ADataAssetMananger::RequestAsyncLoadObject(this, ImageName, [this](UObject *AssetObj)
@@ -86,7 +86,7 @@ void USortCard::PopDown()
 	SortImageSlot->SetVerticalAlignment(VAlign_Bottom);
 }
 
-void USortCard::OnCardActive(TEnumAsByte<ItemClassification> Index)
+void USortCard::OnCardActive(TEnumAsByte<EItemClassification> Index)
 {
 	if (CardIndex == Index)
 	{

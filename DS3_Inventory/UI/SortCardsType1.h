@@ -24,14 +24,14 @@ private:
 	int CardNum;
 
 	// enum that is currently being displayed
-	TArray<TEnumAsByte<ItemClassification>> DisplayingIndex;
+	TArray<TEnumAsByte<EItemClassification>> DisplayingIndex;
 	// corresponding Image name for each enum
-	TMap<TEnumAsByte<ItemClassification>, FName> CardImages;
+	TMap<TEnumAsByte<EItemClassification>, FName> CardImages;
 	
-	// the number of enums in ItemClassification
-	const ItemClassification TotalNum = TEnumAsByte<ItemClassification>(ItemClassification::ENUM_END - ENUM_START);
+	// the number of enums in EItemClassification
+	const EItemClassification TotalNum = TEnumAsByte<EItemClassification>(EItemClassification::ENUM_END - ENUM_START);
 	// current viewing classification
-	ItemClassification CurrentActiveIndex = ItemClassification::ENUM_START;
+	EItemClassification CurrentActiveIndex = EItemClassification::ENUM_START;
 
 public:
 	virtual void NativeConstruct() override;
@@ -66,7 +66,7 @@ public:
 	void Init(FSortCardsType1Attr SortCardsAttr);
 
 	UFUNCTION()
-	void UpdateActiveIndex(TEnumAsByte<ItemClassification> Index);
+	void UpdateActiveIndex(TEnumAsByte<EItemClassification> Index);
 
 	UFUNCTION()
 	void NativeLeftButtonClicked();

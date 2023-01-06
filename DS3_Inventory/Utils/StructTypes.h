@@ -1,5 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
+// ReSharper disable CppPossiblyUninitializedMember
 #pragma once
 
 #include "CoreMinimal.h"
@@ -18,9 +19,25 @@ class DS3_INVENTORY_API UStructTypes : public UObject
 
 ////-------------------------------- region --------------------------------////
 #pragma region Enums
+
+/*UENUM(BlueprintType)
+enum ETestEnum { Test1, ENUM_st = Test1, Test2, Test3 };
+
+USTRUCT(BlueprintType)
+struct FTestStruct : public FTableRowBase
+{
+	GENERATED_BODY()
+
+public:
+	FTestStruct() {}
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TEnumAsByte<ETestEnum> Test;
+};*/
+
 // 物品分类
 UENUM(BlueprintType)
-enum EItemClassification { ENUM_START, Consumables = ENUM_START,
+enum EItemClassification { Consumables, ENUM_START = Consumables,
 	 Weapon, WearableEquipment, Important, Magics, Rings, ENUM_END };
 
 // 属性加成
@@ -46,8 +63,10 @@ enum EPlayerStats { Vigor, Attunement, Endurance, Vitality, Strength, Dexterity,
 #pragma endregion Enums
 
 
+
+
 ////-------------------------------- region --------------------------------////
-#pragma region ItemAttrs
+#pragma region Item_AttrStructs
 // BASE class of item in inventory
 USTRUCT(BlueprintType)
 struct FInventoryItemAttr : public FTableRowBase
@@ -55,7 +74,6 @@ struct FInventoryItemAttr : public FTableRowBase
 	GENERATED_BODY()
 
 public:
-	// ReSharper disable once CppPossiblyUninitializedMember
 	FInventoryItemAttr() {}
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -81,8 +99,7 @@ struct FConsumablesItemAttr : public FInventoryItemAttr
 	GENERATED_BODY()
 
 public:
-	// ReSharper disable once CppPossiblyUninitializedMember
-	FConsumablesItemAttr() {}
+	FConsumablesItemAttr() { ItemType = EItemClassification::Consumables; }
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FName ItemEffect;
@@ -101,12 +118,11 @@ struct FWeaponItemAttr : public FInventoryItemAttr
 	GENERATED_BODY()
 
 public:
-	// ReSharper disable once CppPossiblyUninitializedMember
-	FWeaponItemAttr() {}
+	FWeaponItemAttr() {	ItemType = EItemClassification::Weapon; }
 
 	/* common attr for weapon */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	FName Upgrades;
+	FName Upgrades = "NONE";
 	
 	// straight sword, spear... etc.
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -162,8 +178,7 @@ struct FWearableEquipmentItemAttr : public FInventoryItemAttr
 	GENERATED_BODY()
 
 public:
-	// ReSharper disable once CppPossiblyUninitializedMember
-	FWearableEquipmentItemAttr() {}
+	FWearableEquipmentItemAttr() {	ItemType = EItemClassification::WearableEquipment; }
 	
 	/* common attr */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -194,7 +209,7 @@ struct FImportantItemAttr : public FInventoryItemAttr
 	GENERATED_BODY()
 
 public:
-	FImportantItemAttr() {}
+	FImportantItemAttr() {	ItemType = EItemClassification::Important; }
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FName ItemEffect;
@@ -202,13 +217,12 @@ public:
 
 // Magics
 USTRUCT(BlueprintType)
-struct FMagicItemAttr
+struct FMagicItemAttr : public FInventoryItemAttr
 {
 	GENERATED_BODY()
 	
 public:
-	// ReSharper disable once CppPossiblyUninitializedMember
-	FMagicItemAttr() {}
+	FMagicItemAttr() {	ItemType = EItemClassification::Magics; }
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FName MagicType;
@@ -231,13 +245,12 @@ public:
 
 // Rings 
 USTRUCT(BlueprintType)
-struct FRingItemAttr
+struct FRingItemAttr : public FInventoryItemAttr
 {
 	GENERATED_BODY()
 	
 public:
-	// ReSharper disable once CppPossiblyUninitializedMember
-	FRingItemAttr() {}
+	FRingItemAttr() { ItemType = EItemClassification::Rings; }
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float Weight;
@@ -246,21 +259,212 @@ public:
 	FName ItemEffect;
 };
 
-#pragma endregion ItemAttrs
+#pragma endregion Item_AttrStructs
+
 
 
 
 ////-------------------------------- region --------------------------------////
-#pragma region MenuAttrs
+#pragma region GameSave_DataStructs
+
 USTRUCT(BlueprintType)
-struct FItemGridType1Attr
+struct FGridData
+{
+	GENERATED_BODY()
+
+public:
+	FGridData() {}
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int ItemID;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int Num;
+
+};
+
+
+USTRUCT(BlueprintType)
+struct FClassifiedGridData
+{
+	GENERATED_BODY()
+
+public:
+	FClassifiedGridData() {}
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TArray<FGridData> ClassifiedGridData;
+};
+
+USTRUCT(BlueprintType)
+struct FClassifiedStorageGridData
+{
+	GENERATED_BODY()
+
+public:
+	FClassifiedStorageGridData() {}
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TArray<FGridData> ClassifiedStorageGridData;
+};
+
+USTRUCT(BlueprintType)
+struct FInventoryData
+{
+	GENERATED_BODY()
+
+public:
+	FInventoryData() {}
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TMap<TEnumAsByte<EItemClassification>, FClassifiedGridData> GridDatas;
+
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TMap<TEnumAsByte<EItemClassification>, FClassifiedStorageGridData> StorageGridDatas;
+};
+
+
+
+USTRUCT(BlueprintType)
+struct FPlayerStats
+{
+	GENERATED_BODY()
+
+public:
+	FPlayerStats() {}
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int Level;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int Curse;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int MaxHP;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int CurrentHP;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int MaxFP;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int CurrentFP;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int MaxStamina;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int CurrentStamina;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TMap<TEnumAsByte<EPlayerStats>, int> Stats;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int MaxEquipLoad;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int CurrentEquipLoad;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int Poise;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int ItemDiscovery;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int AttunementSlots;
+};
+
+
+USTRUCT(BlueprintType)
+struct FPlayerData
+{
+	GENERATED_BODY()
+
+public:
+	FPlayerData() {}
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FName Name;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FVector Location;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FPlayerStats PlayerStats;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FInventoryData InventoryData;
+
+};
+
+
+USTRUCT(BlueprintType)
+struct FItemOnGroundData
+{
+	GENERATED_BODY()
+
+public:
+	FItemOnGroundData() {}
+
+	// unique id to identify the item on ground
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FName ItemOnGroundIndex;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FVector Location;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int ID;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int Num;
+};
+
+USTRUCT(BlueprintType)
+struct FGameSaveData
+{
+	GENERATED_BODY()
+
+public:
+	FGameSaveData() {}
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FPlayerData PlayerData;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TMap<FName, FItemOnGroundData> ItemOnGroundData;
+	
+};
+#pragma endregion GameSave_DataStructs
+
+
+
+
+////-------------------------------- region --------------------------------////
+#pragma region Menu_AttrStructs
+USTRUCT(BlueprintType)
+struct FItemGridType1Attr : public FTableRowBase
 {
 	GENERATED_BODY()
 
 public:
 	FItemGridType1Attr() {}
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FVector2D GridSize;
 	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FName GridBaseImage;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FVector2D DishImageSize;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FName DishImage;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FVector2D ItemImageSize;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FName SelectImage;
 };
 
 USTRUCT(BlueprintType)
@@ -408,4 +612,4 @@ public:
 	FName MenuBaseImage;
 };
 
-#pragma endregion MenuAttrs
+#pragma endregion Menu_AttrStructs

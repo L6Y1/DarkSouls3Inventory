@@ -22,7 +22,7 @@ private:
 	UOverlaySlot *SortImageSlot;
 	UOverlaySlot *ShadderImageSlot;
 
-	ItemClassification CardIndex;
+	EItemClassification CardIndex;
 	
 public:
 	virtual void NativeConstruct() override;
@@ -45,7 +45,7 @@ public:
 
 public:
 	UFUNCTION()
-	void Init(TEnumAsByte<ItemClassification> Index, FName ImageName);
+	void Init(TEnumAsByte<EItemClassification> Index, FName ImageName);
 
 	UFUNCTION()
 	void PopUp();
@@ -54,6 +54,6 @@ public:
 	void PopDown();
 	
 	UFUNCTION()
-	void OnCardActive(TEnumAsByte<ItemClassification> Index);
+	void OnCardActive(TEnumAsByte<EItemClassification> Index);
 };
 

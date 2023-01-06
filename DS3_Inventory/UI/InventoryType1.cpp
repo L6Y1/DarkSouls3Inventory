@@ -50,8 +50,23 @@ void UInventoryType1::Init(FInventoryType1Attr InventoryAttr)
 	InventoryBaseImage->SetVisibility(ESlateVisibility::Visible);
 
 	
-	// TODO : init SortCards and ItemGrids here
-	auto *SortCardsAttr = FDataTableTool::GetSortCardsType1Attr(FName("SkinType1"));
+	
+	FString SortCardsSkinType, ItemGridSkinType;
+	GConfig->GetString(
+		TEXT("GameUIInit/ItemParts/InventoryWidgetType1/SortCardWidgetType1"),
+		TEXT("SortCardWidgetType1SkinType"),
+		SortCardsSkinType,
+		GGameIni
+		);
+	GConfig->GetString(
+		TEXT("GameUIInit/ItemParts/InventoryWidgetType1/ItemGridWidgetType1"),
+		TEXT("ItemGridWidgetType1SkinType"),
+		ItemGridSkinType,
+		GGameIni
+		);
+
+	// init SortCards
+	auto *SortCardsAttr = FDataTableTool::GetSortCardsType1Attr(FName(SortCardsSkinType));
 	ADataAssetMananger::RequestAsyncLoadClass(this, InventoryAttr.SortCardWidgetClass, [this, SortCardsAttr](UClass *ClassAsset)
 	{
 		auto *SortCardsWidget = CreateWidget(GetOwningPlayer(), ClassAsset);
@@ -62,8 +77,15 @@ void UInventoryType1::Init(FInventoryType1Attr InventoryAttr)
 		}
 		SortCardsSlot->AddChild(SortCardsWidget);
 	});
-	// UKismetSystemLibrary::PrintString(nullptr, "Inventory INIT()");
 
+
+	// init
+	auto ItemGridAttr = FDataTableTool::GetItemGridType1Attr(FName(ItemGridSkinType));
+
+
+
+	
+	// UKismetSystemLibrary::PrintString(nullptr, "Inventory INIT()");
 }
 
 FReply UInventoryType1::NativeOnFocusReceived(const FGeometry &InGeometry, const FFocusEvent &InFocusEvent)

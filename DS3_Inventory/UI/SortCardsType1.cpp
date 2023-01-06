@@ -43,6 +43,13 @@ void USortCardsType1::NativeTick(const FGeometry &MyGeometry, float InDeltaTime)
 
 void USortCardsType1::Init(FSortCardsType1Attr SortCardsAttr)
 {
+	/*TArray<TEnumAsByte<EItemClassification>> OutArray;
+	SortCardsAttr.CardImage.GetKeys(OutArray);
+	for (auto Temp : OutArray)
+	{
+		UKismetSystemLibrary::PrintString(nullptr, UEnum::GetValueAsName(Temp).ToString());		
+	}*/
+	
 	// load images and apply them, leave blank here
 
 	SortCardsSizeBox->SetWidthOverride(SortCardsAttr.SortCardsSize.X);
@@ -63,22 +70,22 @@ void USortCardsType1::Init(FSortCardsType1Attr SortCardsAttr)
 		{
 			struct 
 			{
-				ItemClassification Index;
+				EItemClassification Index;
 				FName CardImage;
 			} Params;
-			Params.Index = TEnumAsByte<ItemClassification>(i);
+			Params.Index = TEnumAsByte<EItemClassification>(i);
 			Params.CardImage = SortCardsAttr.CardImage.FindRef(Params.Index);
 			
 			SortCardWidget->ProcessEvent(FuncPtr, &Params);
 		}
 		SortCardsHorBox->AddChildToHorizontalBox(SortCardWidget)->SetVerticalAlignment(VAlign_Fill);
 		
-		DisplayingIndex.Add(TEnumAsByte<ItemClassification>(i));
+		DisplayingIndex.Add(TEnumAsByte<EItemClassification>(i));
 	}
 
 }
 
-void USortCardsType1::UpdateActiveIndex(TEnumAsByte<ItemClassification> Index)
+void USortCardsType1::UpdateActiveIndex(TEnumAsByte<EItemClassification> Index)
 {
 	CurrentActiveIndex = Index;
 }
@@ -86,8 +93,8 @@ void USortCardsType1::UpdateActiveIndex(TEnumAsByte<ItemClassification> Index)
 void USortCardsType1::NativeLeftButtonClicked()
 {
 	CurrentActiveIndex - 1 >= 0																? 
-	CurrentActiveIndex = TEnumAsByte<ItemClassification>(CurrentActiveIndex - 1)	:
-	CurrentActiveIndex = TEnumAsByte<ItemClassification>(5);
+	CurrentActiveIndex = TEnumAsByte<EItemClassification>(CurrentActiveIndex - 1)	:
+	CurrentActiveIndex = TEnumAsByte<EItemClassification>(5);
 	
 	// if the active index + 1, is still a displaying index
 	if (DisplayingIndex.Contains(CurrentActiveIndex))
@@ -108,7 +115,7 @@ void USortCardsType1::NativeLeftButtonClicked()
 		{
 			struct 
 			{
-				TEnumAsByte<ItemClassification> Index;
+				TEnumAsByte<EItemClassification> Index;
 				FName ImageName;
 			} Params;
 			Params.Index = CurrentActiveIndex;
@@ -137,7 +144,7 @@ void USortCardsType1::NativeLeftButtonClicked()
 
 void USortCardsType1::NativeRightButtonClicked()
 {
-	CurrentActiveIndex = TEnumAsByte<ItemClassification>((CurrentActiveIndex + 1) % TotalNum);
+	CurrentActiveIndex = TEnumAsByte<EItemClassification>((CurrentActiveIndex + 1) % TotalNum);
 	// if the active index + 1, is still a displaying index
 	if (DisplayingIndex.Contains(CurrentActiveIndex))
 	{
@@ -157,7 +164,7 @@ void USortCardsType1::NativeRightButtonClicked()
 		{
 			struct 
 			{
-				TEnumAsByte<ItemClassification> Index;
+				TEnumAsByte<EItemClassification> Index;
 				FName ImageName;
 			} Params;
 			Params.Index = CurrentActiveIndex;

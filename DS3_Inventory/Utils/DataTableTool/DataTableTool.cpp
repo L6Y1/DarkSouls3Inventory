@@ -90,3 +90,16 @@ FSortCardsType1Attr * FDataTableTool::GetSortCardsType1Attr(FName RowName)
 	}
 	return nullptr;
 }
+
+
+
+DataTable_Impl(ItemGridType1Attr, TEXT("DataTable'/Game/DataTables/DT_ItemGridType1Attr.DT_ItemGridType1Attr'"))
+	
+DataTable_Impl(ConsumablesItemAttr, TEXT("DataTable'/Game/DataTables/ItemsDT/DT_Consumables.DT_Consumables'"))
+DataTable_Impl(WeaponItemAttr, TEXT("DataTable'/Game/DataTables/ItemsDT/DT_Weapon.DT_Weapon'"))
+DataTable_Impl(WearableEquipmentItemAttr, TEXT("DataTable'/Game/DataTables/ItemsDT/DT_WearableEquipment.DT_WearableEquipment'"))
+DataTable_Impl(ImportantItemAttr, TEXT("DataTable'/Game/DataTables/ItemsDT/DT_Important.DT_Important'"))
+DataTable_Impl(MagicItemAttr, TEXT("DataTable'/Game/DataTables/ItemsDT/DT_Magic.DT_Magic'"))
+DataTable_Impl(RingItemAttr, TEXT("DataTable'/Game/DataTables/ItemsDT/DT_Ring.DT_Ring'"))
+
+
