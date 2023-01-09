@@ -7,10 +7,14 @@
 #include "Components/NamedSlot.h"
 #include "Components/SizeBox.h"
 #include "Components/TextBlock.h"
+#include "Components/TileView.h"
+#include "DS3_Inventory/Utils/ListViewData.h"
 #include "DS3_Inventory/Utils/DataAssetMananger/DataAssetMananger.h"
 #include "DS3_Inventory/Utils/DataTableTool/DataTableTool.h"
+#include "DS3_Inventory/Utils/FileTool/FileTool.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Slate/SlateTextureAtlasInterface.h"
+
 
 
 void UInventoryType1::NativeConstruct()
@@ -51,19 +55,13 @@ void UInventoryType1::Init(FInventoryType1Attr InventoryAttr)
 
 	
 	
-	FString SortCardsSkinType, ItemGridSkinType;
+	FString SortCardsSkinType;
 	GConfig->GetString(
 		TEXT("GameUIInit/ItemParts/InventoryWidgetType1/SortCardWidgetType1"),
 		TEXT("SortCardWidgetType1SkinType"),
 		SortCardsSkinType,
 		GGameIni
-		);
-	GConfig->GetString(
-		TEXT("GameUIInit/ItemParts/InventoryWidgetType1/ItemGridWidgetType1"),
-		TEXT("ItemGridWidgetType1SkinType"),
-		ItemGridSkinType,
-		GGameIni
-		);
+	);
 
 	// init SortCards
 	auto *SortCardsAttr = FDataTableTool::GetSortCardsType1Attr(FName(SortCardsSkinType));
@@ -79,13 +77,34 @@ void UInventoryType1::Init(FInventoryType1Attr InventoryAttr)
 	});
 
 
-	// init
-	auto ItemGridAttr = FDataTableTool::GetItemGridType1Attr(FName(ItemGridSkinType));
-
-
-
+	// init grids
+	OnClassificationChange(EItemClassification::Consumables);
 	
 	// UKismetSystemLibrary::PrintString(nullptr, "Inventory INIT()");
+}
+
+void UInventoryType1::OnClassificationChange(TEnumAsByte<EItemClassification> NewClassification)
+{
+	ItemsTileView->ClearListItems();
+	FString ItemGridSkinType;
+	
+	GConfig->GetString(
+		TEXT("GameUIInit/ItemParts/InventoryWidgetType1/ItemGridWidgetType1"),
+		TEXT("ItemGridWidgetType1SkinType"),
+		ItemGridSkinType,
+		GGameIni
+	);
+	auto ItemGridAttr = FDataTableTool::GetItemGridType1Attr(FName(ItemGridSkinType));
+	
+	for (int i = 0; i < 25; ++i)
+	{
+		auto GridData = FGameSaveTool::GetClassifiedGridDataByIndex(NewClassification, i);
+		UListViewData *Item = NewObject<UListViewData>();
+		Item->Index = i;
+		Item->ItemClassification = NewClassification;
+		Item->ItemGridAttr = *ItemGridAttr;
+		ItemsTileView->AddItem(Item);
+	}
 }
 
 FReply UInventoryType1::NativeOnFocusReceived(const FGeometry &InGeometry, const FFocusEvent &InFocusEvent)

@@ -17,7 +17,7 @@ class DS3_INVENTORY_API UStructTypes : public UObject
 	
 };
 
-////-------------------------------- region --------------------------------////
+////-------------------------------- REGION --------------------------------////
 #pragma region Enums
 
 /*UENUM(BlueprintType)
@@ -61,11 +61,12 @@ UENUM(BlueprintType)
 enum EPlayerStats { Vigor, Attunement, Endurance, Vitality, Strength, Dexterity, Intelligence, Faith, Luck };
 
 #pragma endregion Enums
+////-------------------------------- END_REGION --------------------------------////
 
 
 
 
-////-------------------------------- region --------------------------------////
+////-------------------------------- REGION --------------------------------////
 #pragma region Item_AttrStructs
 // BASE class of item in inventory
 USTRUCT(BlueprintType)
@@ -260,11 +261,12 @@ public:
 };
 
 #pragma endregion Item_AttrStructs
+////-------------------------------- END_REGION --------------------------------////
 
 
 
 
-////-------------------------------- region --------------------------------////
+////-------------------------------- REGION --------------------------------////
 #pragma region GameSave_DataStructs
 
 USTRUCT(BlueprintType)
@@ -274,6 +276,8 @@ struct FGridData
 
 public:
 	FGridData() {}
+	
+	FGridData(int ID, int Num): ItemID(ID), Num(Num) {}
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int ItemID;
@@ -293,7 +297,7 @@ public:
 	FClassifiedGridData() {}
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TArray<FGridData> ClassifiedGridData;
+	TArray<FGridData> ClassifiedGridDataArray;
 };
 
 USTRUCT(BlueprintType)
@@ -305,7 +309,7 @@ public:
 	FClassifiedStorageGridData() {}
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TArray<FGridData> ClassifiedStorageGridData;
+	TArray<FGridData> ClassifiedStorageGridDataArray;
 };
 
 USTRUCT(BlueprintType)
@@ -351,16 +355,12 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int MaxStamina;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int CurrentStamina;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TMap<TEnumAsByte<EPlayerStats>, int> Stats;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int MaxEquipLoad;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int CurrentEquipLoad;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int Poise;
@@ -404,7 +404,10 @@ struct FItemOnGroundData
 public:
 	FItemOnGroundData() {}
 
-	// unique id to identify the item on ground
+	FItemOnGroundData(FName Index, FVector Location, int ID, int Num)
+	: ItemOnGroundIndex(Index),Location(Location), ID(ID), Num(Num)  {}
+	
+	// unique id(FName) to identify the item on ground
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FName ItemOnGroundIndex;
 	
@@ -434,11 +437,12 @@ public:
 	
 };
 #pragma endregion GameSave_DataStructs
+////-------------------------------- END_REGION --------------------------------////
 
 
 
 
-////-------------------------------- region --------------------------------////
+////-------------------------------- REGION --------------------------------////
 #pragma region Menu_AttrStructs
 USTRUCT(BlueprintType)
 struct FItemGridType1Attr : public FTableRowBase
@@ -613,3 +617,4 @@ public:
 };
 
 #pragma endregion Menu_AttrStructs
+////-------------------------------- END_REGION --------------------------------////

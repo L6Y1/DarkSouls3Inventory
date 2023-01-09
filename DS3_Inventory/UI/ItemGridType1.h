@@ -3,62 +3,60 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Blueprint/IUserObjectListEntry.h"
 #include "Blueprint/UserWidget.h"
-#include "DS3_Inventory/Utils/StructTypes.h"
-#include "InventoryType1.generated.h"
+#include "ItemGridType1.generated.h"
 
-class UWrapBox;
-class UScrollBox;
+
 class UTextBlock;
 class UImage;
 class USizeBox;
-class UTileView;
 /**
  * 
  */
 UCLASS()
-class DS3_INVENTORY_API UInventoryType1 : public UUserWidget
+class DS3_INVENTORY_API UItemGridType1 : public UUserWidget, public IUserObjectListEntry
 {
 	GENERATED_BODY()
-
+	
 private:
+	int CurrentItemIndex;
 
 public:
 	virtual void NativeConstruct() override;
 	virtual void NativeDestruct() override;
 
+	virtual void NativeOnListItemObjectSet(UObject *ListItemObject) override;
+	
 public:
 	UPROPERTY(meta=(BindWidget), VisibleAnywhere, BlueprintReadOnly)
-	USizeBox *InventorySizeBox;
+	USizeBox *ItemGridSizeBox;
 
 	UPROPERTY(meta=(BindWidget), VisibleAnywhere, BlueprintReadOnly)
-	UNamedSlot *SortCardsSlot;
+	UImage *ItemGridBaseImage;
 
 	UPROPERTY(meta=(BindWidget), VisibleAnywhere, BlueprintReadOnly)
-	USizeBox *InventoryBaseSizeBox;
+	USizeBox *DishImageSizeBox;
 
 	UPROPERTY(meta=(BindWidget), VisibleAnywhere, BlueprintReadOnly)
-	UImage *InventoryBaseImage;
+	UImage *DishImage;
 
 	UPROPERTY(meta=(BindWidget), VisibleAnywhere, BlueprintReadOnly)
-	UTextBlock *ItemNameText;
+	USizeBox *ItemImageSizeBox;
 
 	UPROPERTY(meta=(BindWidget), VisibleAnywhere, BlueprintReadOnly)
-	UScrollBox *InventoryItemScrollBox;
+	UImage *ItemImage;
 
 	UPROPERTY(meta=(BindWidget), VisibleAnywhere, BlueprintReadOnly)
-	UWrapBox *InventoryItemWrapBox;
+	UTextBlock *ItemNumText;
 
 	UPROPERTY(meta=(BindWidget), VisibleAnywhere, BlueprintReadOnly)
-	UTileView *ItemsTileView;
+	UImage *SelectImage;
+
+	
 
 public:
-	UFUNCTION()
-	void Init(FInventoryType1Attr InventoryAttr);
-
-	UFUNCTION()
-	void OnClassificationChange(TEnumAsByte<EItemClassification> NewClassification);
-
-	virtual FReply NativeOnFocusReceived(const FGeometry &InGeometry, const FFocusEvent &InFocusEvent) override;
-	virtual void NativeOnFocusLost(const FFocusEvent &InFocusEvent) override;
+	// UFUNCTION()
+	// void Init();
+	
 };

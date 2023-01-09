@@ -36,7 +36,7 @@ return Result;\
 return nullptr;\
 };
 
-
+#define IntToName(Num) FName(FString::FromInt(Num))
 
 
 
@@ -79,3 +79,4 @@ public:
 	DataTable_Signature(MagicItemAttr)
 	DataTable_Signature(RingItemAttr)
 };
+
