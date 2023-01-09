@@ -444,6 +444,27 @@ public:
 
 ////-------------------------------- REGION --------------------------------////
 #pragma region Menu_AttrStructs
+
+USTRUCT(BlueprintType)
+struct FStatusType1Attr : public FTableRowBase
+{
+	GENERATED_BODY()
+
+public:
+	FStatusType1Attr() {}
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FName StatusBaseImage;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TMap<FString, FName> StatsImages;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FName StatusUnitClass;
+	
+};
+
+
 USTRUCT(BlueprintType)
 struct FItemGridType1Attr : public FTableRowBase
 {

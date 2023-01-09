@@ -15,6 +15,12 @@ FGridData FGameSaveTool::GetClassifiedGridDataByIndex(TEnumAsByte<EItemClassific
 	return FGridData(0, 0);
 }
 
+int FGameSaveTool::GetTotalItemNumberByClassification(TEnumAsByte<EItemClassification> Classification)
+{
+	auto GameSaveData = FFileTool::LoadGame();
+	return GameSaveData.PlayerData.InventoryData.GridDatas.Find(Classification)->ClassifiedGridDataArray.Num();
+}
+
 #include "Kismet/KismetSystemLibrary.h"
 
 FGameSaveData FFileTool::LoadGame(FString RelativePath, FString FileName)

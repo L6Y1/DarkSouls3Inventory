@@ -113,10 +113,21 @@ void UFullScreenDisplayType1::Init(FFullScreenDisplayType1Attr FullScreenDisplay
 
 	auto *InventoryAttr = FDataTableTool::GetInventoryType1Attr(FName(SkinTypes[0]));
 	
-	auto *FuncPtr = Widgets[0]->FindFunction(FName("Init"));
-	if (FuncPtr)
 	{
-		Widgets[0]->ProcessEvent(FuncPtr, InventoryAttr);
+		auto *FuncPtr = Widgets[0]->FindFunction(FName("Init"));
+		if (FuncPtr)
+		{
+			Widgets[0]->ProcessEvent(FuncPtr, InventoryAttr);
+		}
+	}
+
+	auto *StatusAttr = FDataTableTool::GetStatusType1Attr(FName(SkinTypes[2]));
+	{
+		auto *FuncPtr = Widgets[2]->FindFunction(FName("Init"));
+		if (FuncPtr)
+		{
+			Widgets[2]->ProcessEvent(FuncPtr, StatusAttr);
+		}
 	}
 
 	// add 3 widgets to corresponding slot

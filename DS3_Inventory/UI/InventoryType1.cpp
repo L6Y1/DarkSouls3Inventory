@@ -12,7 +12,7 @@
 #include "DS3_Inventory/Utils/DataAssetMananger/DataAssetMananger.h"
 #include "DS3_Inventory/Utils/DataTableTool/DataTableTool.h"
 #include "DS3_Inventory/Utils/FileTool/FileTool.h"
-#include "Kismet/KismetSystemLibrary.h"
+#include "DS3_Inventory/Utils/GlobalEventManager/GlobalEventManager.h"
 #include "Slate/SlateTextureAtlasInterface.h"
 
 
@@ -20,17 +20,21 @@
 void UInventoryType1::NativeConstruct()
 {
 	Super::NativeConstruct();
-	// UKismetSystemLibrary::PrintString(nullptr, "Inventory Construct");
+	FGlobalEventManager::RegisterEvent(FName("CardActiveEvent"), this, FName("OnClassificationChange"));
+	FGlobalEventManager::RegisterEvent(FName("ItemSelectedEvent"), this, FName("OnItemSelected"));
 
 }
 
 void UInventoryType1::NativeDestruct()
 {
 	Super::NativeDestruct();
+	FGlobalEventManager::UnRegisterEvent(FName("CardActiveEvent"), this);
+
 }
 
 void UInventoryType1::Init(FInventoryType1Attr InventoryAttr)
 {
+	
 	ItemNameText->SetVisibility(ESlateVisibility::Collapsed);
 	InventoryBaseImage->SetVisibility(ESlateVisibility::Collapsed);
 	
@@ -80,11 +84,11 @@ void UInventoryType1::Init(FInventoryType1Attr InventoryAttr)
 	// init grids
 	OnClassificationChange(EItemClassification::Consumables);
 	
-	// UKismetSystemLibrary::PrintString(nullptr, "Inventory INIT()");
 }
 
 void UInventoryType1::OnClassificationChange(TEnumAsByte<EItemClassification> NewClassification)
 {
+	SortNameText->SetText(FText::FromName(UEnum::GetValueAsName(NewClassification)));
 	ItemsTileView->ClearListItems();
 	FString ItemGridSkinType;
 	
@@ -95,26 +99,26 @@ void UInventoryType1::OnClassificationChange(TEnumAsByte<EItemClassification> Ne
 		GGameIni
 	);
 	auto ItemGridAttr = FDataTableTool::GetItemGridType1Attr(FName(ItemGridSkinType));
+
+	int ItemNum = FGameSaveTool::GetTotalItemNumberByClassification(NewClassification);
+	int GridNum = ItemNum <= 25 ? 25 : 5 * (ItemNum / 5 + 1);
 	
-	for (int i = 0; i < 25; ++i)
+	for (int i = 0; i < GridNum; ++i)
 	{
 		auto GridData = FGameSaveTool::GetClassifiedGridDataByIndex(NewClassification, i);
 		UListViewData *Item = NewObject<UListViewData>();
 		Item->Index = i;
 		Item->ItemClassification = NewClassification;
 		Item->ItemGridAttr = *ItemGridAttr;
+		
 		ItemsTileView->AddItem(Item);
 	}
 }
 
-FReply UInventoryType1::NativeOnFocusReceived(const FGeometry &InGeometry, const FFocusEvent &InFocusEvent)
+void UInventoryType1::OnItemSelected(FName ItemName, int ItemID)
 {
-	// UKismetSystemLibrary::PrintString(nullptr, "Focus");
-	return Super::NativeOnFocusReceived(InGeometry, InFocusEvent);
+	ItemID != 0 ?
+		ItemNameText->SetText(FText::FromName(ItemName)), ItemNameText->SetVisibility(ESlateVisibility::Visible) :
+		ItemNameText->SetVisibility(ESlateVisibility::Collapsed);
 }
 
-void UInventoryType1::NativeOnFocusLost(const FFocusEvent &InFocusEvent)
-{
-	// UKismetSystemLibrary::PrintString(nullptr, "FocusLost");
-	Super::NativeOnFocusLost(InFocusEvent);
-}

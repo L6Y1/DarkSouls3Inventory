@@ -91,7 +91,7 @@ FSortCardsType1Attr * FDataTableTool::GetSortCardsType1Attr(FName RowName)
 	return nullptr;
 }
 
-
+DataTable_Impl(StatusType1Attr, TEXT("DataTable'/Game/DataTables/DT_StatusType1Attr.DT_StatusType1Attr'"))
 
 DataTable_Impl(ItemGridType1Attr, TEXT("DataTable'/Game/DataTables/DT_ItemGridType1Attr.DT_ItemGridType1Attr'"))
 	

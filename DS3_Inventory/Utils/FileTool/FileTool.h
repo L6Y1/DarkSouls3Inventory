@@ -8,17 +8,6 @@
 #include "FileTool.generated.h"
 
 
-class FGameSaveTool
-{
-public:
-	static FGridData GetClassifiedGridDataByIndex(TEnumAsByte<EItemClassification> Classification, int Index);
-
-	
-};
-
-
-
-
 /**
  * @brief util class for FFileTool to serialize/deserialize JSON string 
  */
@@ -58,6 +47,30 @@ public:
 		FString RelativePath = FString("/GameSaves"),
 		FString FileName = FString("SaveGame00.sav"));
 	
+};
+
+class FGameSaveTool
+{
+public:
+	static FORCEINLINE FGameSaveData GetGameSaveData()
+	{
+		return FFileTool::LoadGame();
+	}
+
+	/**
+	 * @brief 
+	 * @param Classification the classification of item wished to be found
+	 * @param Index the index of item to be found
+	 * @return grid data of the item
+	 */
+	static FGridData GetClassifiedGridDataByIndex(TEnumAsByte<EItemClassification> Classification, int Index);
+
+	/**
+	 * @brief 
+	 * @param Classification the classification
+	 * @return item number of given classification
+	 */
+	static int GetTotalItemNumberByClassification(TEnumAsByte<EItemClassification> Classification);
 };
 
 

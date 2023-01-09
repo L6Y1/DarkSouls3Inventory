@@ -30,6 +30,9 @@ public:
 public:
 	UPROPERTY(meta=(BindWidget), VisibleAnywhere, BlueprintReadOnly)
 	USizeBox *InventorySizeBox;
+	
+	UPROPERTY(meta=(BindWidget), VisibleAnywhere, BlueprintReadOnly)
+	UTextBlock *SortNameText;
 
 	UPROPERTY(meta=(BindWidget), VisibleAnywhere, BlueprintReadOnly)
 	UNamedSlot *SortCardsSlot;
@@ -42,12 +45,7 @@ public:
 
 	UPROPERTY(meta=(BindWidget), VisibleAnywhere, BlueprintReadOnly)
 	UTextBlock *ItemNameText;
-
-	UPROPERTY(meta=(BindWidget), VisibleAnywhere, BlueprintReadOnly)
-	UScrollBox *InventoryItemScrollBox;
-
-	UPROPERTY(meta=(BindWidget), VisibleAnywhere, BlueprintReadOnly)
-	UWrapBox *InventoryItemWrapBox;
+	
 
 	UPROPERTY(meta=(BindWidget), VisibleAnywhere, BlueprintReadOnly)
 	UTileView *ItemsTileView;
@@ -59,6 +57,7 @@ public:
 	UFUNCTION()
 	void OnClassificationChange(TEnumAsByte<EItemClassification> NewClassification);
 
-	virtual FReply NativeOnFocusReceived(const FGeometry &InGeometry, const FFocusEvent &InFocusEvent) override;
-	virtual void NativeOnFocusLost(const FFocusEvent &InFocusEvent) override;
+	UFUNCTION()
+	void OnItemSelected(FName ItemName, int ItemID);
+	
 };

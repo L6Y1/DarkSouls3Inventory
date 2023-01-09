@@ -12,6 +12,8 @@
 #include "DS3_Inventory/Utils/DataAssetMananger/DataAssetMananger.h"
 #include "DS3_Inventory/Utils/DataTableTool/DataTableTool.h"
 #include "DS3_Inventory/Utils/FileTool/FileTool.h"
+#include "DS3_Inventory/Utils/GlobalEventManager/GlobalEventManager.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 
 void UItemGridType1::NativeConstruct()
@@ -24,9 +26,15 @@ void UItemGridType1::NativeDestruct()
 	Super::NativeDestruct();
 }
 
+
 void UItemGridType1::NativeOnListItemObjectSet(UObject *ListItemObject)
 {
 	IUserObjectListEntry::NativeOnListItemObjectSet(ListItemObject);
+
+	ItemImage->SetVisibility(ESlateVisibility::Collapsed);
+	ItemNumText->SetVisibility(ESlateVisibility::Collapsed);
+	SelectImage->SetVisibility(ESlateVisibility::Collapsed);
+	DishImage->SetVisibility(ESlateVisibility::Collapsed);
 	
 	auto ListViewData = Cast<UListViewData>(ListItemObject);
 
@@ -44,6 +52,7 @@ void UItemGridType1::NativeOnListItemObjectSet(UObject *ListItemObject)
 	
 	
 	auto GridData = FGameSaveTool::GetClassifiedGridDataByIndex(ListViewData->ItemClassification, CurrentItemIndex);
+	ItemID = GridData.ItemID;
 
 	if (GridData.ItemID == 0)
 	{
@@ -51,11 +60,13 @@ void UItemGridType1::NativeOnListItemObjectSet(UObject *ListItemObject)
 		{
 			ListViewData->ItemGridAttr.GridBaseImage,
 			ListViewData->ItemGridAttr.DishImage,
+			ListViewData->ItemGridAttr.SelectImage
 					},
 		[this, ListViewData](TArray<UObject*> AssetObjs)
 		{
 			auto GridBaseImageSprite = Cast<UPaperSprite>(AssetObjs[0]);
 			auto DishImageTexture = Cast<UTexture2D>(AssetObjs[1]);
+			auto SelectImageSprite = Cast<UPaperSprite>(AssetObjs[2]);
 			
 			{
 				const FSlateAtlasData SpriteAtlasData = GridBaseImageSprite->GetSlateAtlasData();
@@ -65,13 +76,18 @@ void UItemGridType1::NativeOnListItemObjectSet(UObject *ListItemObject)
 				Brush.ImageSize = SpriteSize;
 				ItemGridBaseImage->SetBrush(Brush);
 			}
+			{
+				const FSlateAtlasData SpriteAtlasData = SelectImageSprite->GetSlateAtlasData();
+				const FVector2D SpriteSize = SpriteAtlasData.GetSourceDimensions();
+				FSlateBrush Brush;
+				Brush.SetResourceObject(SelectImageSprite);
+				Brush.ImageSize = SpriteSize;
+				SelectImage->SetBrush(Brush);
+				SelectImage->SetVisibility(ESlateVisibility::Collapsed);
+			}
 
 			DishImage->SetBrushFromTexture(DishImageTexture);
 		});
-		ItemImage->SetVisibility(ESlateVisibility::Collapsed);
-		ItemNumText->SetVisibility(ESlateVisibility::Collapsed);
-		SelectImage->SetVisibility(ESlateVisibility::Collapsed);
-		DishImage->SetVisibility(ESlateVisibility::Collapsed);
 		return;
 	}
 	
@@ -104,6 +120,8 @@ void UItemGridType1::NativeOnListItemObjectSet(UObject *ListItemObject)
 
 	ItemNumText->SetText(FText::FromString(FString::FromInt(GridData.Num)));
 	Attr->bShowNum ? ItemNumText->SetVisibility(ESlateVisibility::Visible) : ItemNumText->SetVisibility(ESlateVisibility::Collapsed);
+
+	ItemName = Attr->ItemName;
 	
 	
 	ADataAssetMananger::RequestAsyncLoadObjects(this,
@@ -142,7 +160,32 @@ void UItemGridType1::NativeOnListItemObjectSet(UObject *ListItemObject)
 			}
 			
 			ItemImage->SetBrushFromTexture(ItemImageTexture);
-			
+
+			ItemImage->SetVisibility(ESlateVisibility::Visible);
+			DishImage->SetVisibility(ESlateVisibility::Visible);
 		});
+	
+}
+
+void UItemGridType1::NativeOnItemSelectionChanged(bool bIsSelected)
+{
+	IUserObjectListEntry::NativeOnItemSelectionChanged(bIsSelected);
+	if (bIsSelected)
+	{
+		SelectImage->SetVisibility(ESlateVisibility::Visible);
+
+		struct 
+		{
+			FName ItemName;
+			int ItemID;
+		} Params;
+		Params.ItemID = ItemID;
+		Params.ItemName = ItemName;
+		FGlobalEventManager::TriggerEvent(FName("ItemSelectedEvent"), &Params);
+	}
+	else
+	{
+		SelectImage->SetVisibility(ESlateVisibility::Collapsed);
+	}
 	
 }

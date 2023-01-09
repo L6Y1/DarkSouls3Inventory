@@ -69,6 +69,7 @@ public:
 	static FInventoryType1Attr *GetInventoryType1Attr(FName RowName);
 	static FSortCardsType1Attr *GetSortCardsType1Attr(FName RowName);
 
+	DataTable_Signature(StatusType1Attr)
 
 	DataTable_Signature(ItemGridType1Attr)
 	

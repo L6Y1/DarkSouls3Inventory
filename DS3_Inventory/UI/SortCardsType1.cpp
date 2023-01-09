@@ -16,10 +16,10 @@
 void USortCardsType1::NativeConstruct()
 {
 	Super::NativeConstruct();
-	UKismetSystemLibrary::PrintString(nullptr, FString::FromInt(TotalNum));
 	LeftShadder->SetVisibility(ESlateVisibility::Collapsed);
 	RightShadder->SetVisibility(ESlateVisibility::Collapsed);
 
+	// on creation, trigger the CardActiveEvent to set Consumables as default active card
 	FGlobalEventManager::RegisterEvent(FName("CardActiveEvent"), this, FName("UpdateActiveIndex"));
 	FGlobalEventManager::TriggerEvent(FName("CardActiveEvent"), &CurrentActiveIndex);
 

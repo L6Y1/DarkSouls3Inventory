@@ -21,12 +21,18 @@ class DS3_INVENTORY_API UItemGridType1 : public UUserWidget, public IUserObjectL
 	
 private:
 	int CurrentItemIndex;
+	int ItemID;
+	FName ItemName;
 
 public:
 	virtual void NativeConstruct() override;
 	virtual void NativeDestruct() override;
-
+	
+	
+	// IUserObjectListEntry implementation
 	virtual void NativeOnListItemObjectSet(UObject *ListItemObject) override;
+	virtual void NativeOnItemSelectionChanged(bool bIsSelected) override;
+	
 	
 public:
 	UPROPERTY(meta=(BindWidget), VisibleAnywhere, BlueprintReadOnly)
