@@ -9,6 +9,6 @@ public class DS3_Inventory : ModuleRules
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
 		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "HeadMountedDisplay",
-			"Paper2D", "SlateCore", "UMG", "Json","JsonUtilities" });
+			"Paper2D", "SlateCore", "UMG", "Json","JsonUtilities", "interactive" });
 	}
 }

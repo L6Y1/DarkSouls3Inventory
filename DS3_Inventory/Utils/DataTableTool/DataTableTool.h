@@ -69,9 +69,13 @@ public:
 	static FInventoryType1Attr *GetInventoryType1Attr(FName RowName);
 	static FSortCardsType1Attr *GetSortCardsType1Attr(FName RowName);
 
+	DataTable_Signature(ItemDescription)
+	
 	DataTable_Signature(StatusType1Attr)
 
 	DataTable_Signature(ItemGridType1Attr)
+
+	DataTable_Signature(ItemOnGroundAttr)
 	
 	DataTable_Signature(ConsumablesItemAttr)
 	DataTable_Signature(WeaponItemAttr)
@@ -79,5 +83,32 @@ public:
 	DataTable_Signature(ImportantItemAttr)
 	DataTable_Signature(MagicItemAttr)
 	DataTable_Signature(RingItemAttr)
+
+	static FInventoryItemAttr* GetInventoryItemAttrByID(int ItemID);
 };
 
+#define GET_ITEM_ATTR(ItemID)\
+switch (ItemID / 10000 - 1)\
+{\
+default:\
+	checkf(false, TEXT("ItemID Invalid"));\
+	break;\
+case 0:\
+	auto Attr = FDataTableTool::GetConsumablesItemAttr(IntToName(ItemID));\
+	break;\
+case 1:\
+	auto Attr = FDataTableTool::GetWeaponItemAttr(IntToName(ItemID));\
+	break;\
+case 2:\
+	auto Attr = FDataTableTool::GetWearableEquipmentItemAttr(IntToName(ItemID));\
+	break;\
+case 3:\
+	auto Attr = FDataTableTool::GetImportantItemAttr(IntToName(ItemID));\
+	break;\
+case 4:\
+	auto Attr = FDataTableTool::GetMagicItemAttr(IntToName(ItemID));\
+	break;\
+case 5:\
+	auto Attr = FDataTableTool::GetRingItemAttr(IntToName(ItemID));\
+	break;\
+}

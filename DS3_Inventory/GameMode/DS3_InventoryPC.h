@@ -16,9 +16,7 @@ class DS3_INVENTORY_API ADS3_InventoryPC : public APlayerController
 	GENERATED_BODY()
 
 private:
-	UClass *MainUIClass;
-
-	UUserWidget *MainUIWidget;
+	
 
 
 	ADS3_InventoryPC();
@@ -27,6 +25,8 @@ public:
 	virtual void BeginPlay() override;
 	virtual void SetupInputComponent() override;
 
+	UClass *MainUIClass;
+	UUserWidget *MainUIWidget;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	UUIManagerComponent * UIManagerComponent;
@@ -34,4 +34,7 @@ public:
 	void ToggleMenuTop();
 	void ReturnToFormerUI();
 	void ReturnToMainUI();
+
+
+
 };

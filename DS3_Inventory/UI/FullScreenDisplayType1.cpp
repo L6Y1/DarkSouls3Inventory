@@ -10,6 +10,7 @@
 #include "Components/TextBlock.h"
 #include "DS3_Inventory/Utils/DataAssetMananger/DataAssetMananger.h"
 #include "DS3_Inventory/Utils/DataTableTool/DataTableTool.h"
+#include "DS3_Inventory/Utils/GlobalEventManager/GlobalEventManager.h"
 #include "Kismet/KismetSystemLibrary.h"
 
 
@@ -22,6 +23,7 @@ void UFullScreenDisplayType1::NativeConstruct()
 {
 	Super::NativeConstruct();
 	// UKismetSystemLibrary::PrintString(nullptr, "FullScreen Construct");
+	FGlobalEventManager::RegisterEvent(FName("ItemSelectedEvent"), this, FName("CreateDescription"));
 
 }
 
@@ -85,7 +87,6 @@ void UFullScreenDisplayType1::Init(FFullScreenDisplayType1Attr FullScreenDisplay
 	
 	TArray<UUserWidget*> Widgets;
 	TArray<FString> SkinTypes;
-	// TODO : init the 3 widget part individually
 	
 	// helper string to get SkinType
 	const FString SkinTypeConfigSectionPrefix = FString("GameUIInit/ItemParts/");
@@ -130,10 +131,41 @@ void UFullScreenDisplayType1::Init(FFullScreenDisplayType1Attr FullScreenDisplay
 		}
 	}
 
+	
+
+	
 	// add 3 widgets to corresponding slot
 	SlotLeft->AddChild(Widgets[0]);
 	SlotMiddle->AddChild(Widgets[1]);
 	SlotRight->AddChild(Widgets[2]);
 
 	// UKismetSystemLibrary::PrintString(nullptr, "FullScreen INIT()");
+}
+
+void UFullScreenDisplayType1::CreateDescription(FName ItemName, int ItemID)
+{
+	if (ItemID == 0) return;
+
+	SlotMiddle->ClearChildren();
+
+	auto *Attr = FDataTableTool::GetInventoryItemAttrByID(ItemID);
+	
+	auto DesClass = ADataAssetMananger::RequestSyncLoadClass(this, FName("Description"));
+	auto DesWidget = CreateWidget(GetOwningPlayer(), DesClass);
+
+	auto *FuncPtr = DesWidget->FindFunction(FName("Init"));
+	if (FuncPtr)
+	{
+		struct
+		{
+			FName ItemImageName;
+			FName ItemName;
+			int ItemID;
+		} Params;
+		Params.ItemImageName = Attr->ItemImage;
+		Params.ItemName = ItemName;
+		Params.ItemID = ItemID;
+		DesWidget->ProcessEvent(FuncPtr, &Params);
+	}
+	SlotMiddle->AddChild(DesWidget);
 }

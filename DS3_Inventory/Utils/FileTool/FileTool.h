@@ -71,6 +71,19 @@ public:
 	 * @return item number of given classification
 	 */
 	static int GetTotalItemNumberByClassification(TEnumAsByte<EItemClassification> Classification);
+
+	// save a single grid/storage grid
+	static void SaveGrid(int Index, FGridData GridData);
+	static void SaveStorageGrid(int Index, FGridData GridData);
+
+	static TMap<FName, FItemOnGroundData> GetItemOnGroundDatas();
+	static FItemOnGroundData GetItemOnGroundDataByIndex(FName Index);
+
+	static void SetItemOnGroundDataByIndex(FName Index, FItemOnGroundData NewData);
+	static void RemoveItemOnGroundDataByIndex(const FName &Index);
+	static bool ItemOnGroundExist(FName Index);
+	static void AddItemOnGroundData(FName Index, FItemOnGroundData NewData);
+	
 };
 
 

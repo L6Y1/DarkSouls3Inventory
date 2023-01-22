@@ -91,10 +91,13 @@ FSortCardsType1Attr * FDataTableTool::GetSortCardsType1Attr(FName RowName)
 	return nullptr;
 }
 
+DataTable_Impl(ItemDescription, TEXT("DataTable'/Game/DataTables/ItemsDT/DT_ItemDescription.DT_ItemDescription'"))
 DataTable_Impl(StatusType1Attr, TEXT("DataTable'/Game/DataTables/DT_StatusType1Attr.DT_StatusType1Attr'"))
 
 DataTable_Impl(ItemGridType1Attr, TEXT("DataTable'/Game/DataTables/DT_ItemGridType1Attr.DT_ItemGridType1Attr'"))
-	
+
+DataTable_Impl(ItemOnGroundAttr, TEXT("DataTable'/Game/DataTables/DT_ItemOnGroundAttr.DT_ItemOnGroundAttr'"))
+
 DataTable_Impl(ConsumablesItemAttr, TEXT("DataTable'/Game/DataTables/ItemsDT/DT_Consumables.DT_Consumables'"))
 DataTable_Impl(WeaponItemAttr, TEXT("DataTable'/Game/DataTables/ItemsDT/DT_Weapon.DT_Weapon'"))
 DataTable_Impl(WearableEquipmentItemAttr, TEXT("DataTable'/Game/DataTables/ItemsDT/DT_WearableEquipment.DT_WearableEquipment'"))
@@ -103,3 +106,33 @@ DataTable_Impl(MagicItemAttr, TEXT("DataTable'/Game/DataTables/ItemsDT/DT_Magic.
 DataTable_Impl(RingItemAttr, TEXT("DataTable'/Game/DataTables/ItemsDT/DT_Ring.DT_Ring'"))
 
 
+
+FInventoryItemAttr* FDataTableTool::GetInventoryItemAttrByID(int ItemID)
+{
+	FInventoryItemAttr *Attr = nullptr;
+	switch (ItemID / 10000 - 1)
+	{
+	default:
+		checkf(Attr != nullptr, TEXT("Attr is nullpointer"));
+		break;
+	case 0:
+		Attr = FDataTableTool::GetConsumablesItemAttr(IntToName(ItemID));
+		break;
+	case 1:
+		Attr = FDataTableTool::GetWeaponItemAttr(IntToName(ItemID));
+		break;
+	case 2:
+		Attr = FDataTableTool::GetWearableEquipmentItemAttr(IntToName(ItemID));
+		break;
+	case 3:
+		Attr = FDataTableTool::GetImportantItemAttr(IntToName(ItemID));
+		break;
+	case 4:
+		Attr = FDataTableTool::GetMagicItemAttr(IntToName(ItemID));
+		break;
+	case 5:
+		Attr = FDataTableTool::GetRingItemAttr(IntToName(ItemID));
+		break;
+	}
+	return Attr;
+}

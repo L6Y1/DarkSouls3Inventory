@@ -59,5 +59,6 @@ public:
 
 	UFUNCTION()
 	void OnItemSelected(FName ItemName, int ItemID);
-	
+
+
 };

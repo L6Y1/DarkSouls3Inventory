@@ -3,6 +3,8 @@
 
 #include "DS3_InventoryPC.h"
 #include "Blueprint/UserWidget.h"
+#include "Components/NamedSlot.h"
+#include "DS3_Inventory/UI/MainUI.h"
 #include "DS3_Inventory/UI/NavButton.h"
 #include "DS3_Inventory/Utils/GlobalEventManager/GlobalEventManager.h"
 #include "DS3_Inventory/Utils/UIManager/UIState.h"
@@ -24,6 +26,7 @@ ADS3_InventoryPC::ADS3_InventoryPC()
 void ADS3_InventoryPC::BeginPlay()
 {
 	Super::BeginPlay();
+
 	
 	// create main ui
 	checkf(MainUIClass, TEXT("MainUIClass not found, check file path"));
@@ -70,3 +73,5 @@ void ADS3_InventoryPC::ReturnToMainUI()
 {
 	UIManagerComponent->PopStates(UIManagerComponent->StateCount() - 1);
 }
+
+

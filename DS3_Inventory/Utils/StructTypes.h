@@ -68,6 +68,27 @@ enum EPlayerStats { Vigor, Attunement, Endurance, Vitality, Strength, Dexterity,
 
 ////-------------------------------- REGION --------------------------------////
 #pragma region Item_AttrStructs
+
+USTRUCT(BlueprintType)
+struct FItemDescription : public FTableRowBase
+{
+	GENERATED_BODY()
+
+public:
+	FItemDescription(){}
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FName Description1;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FName Description2;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FName Description3;
+	
+};
+
+
 // BASE class of item in inventory
 USTRUCT(BlueprintType)
 struct FInventoryItemAttr : public FTableRowBase
@@ -88,6 +109,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int MaxStackNum;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int MaxStorageNum;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bShowNum;
@@ -104,9 +128,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FName ItemEffect;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int MaxStorageNum;
+	
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TMap<TEnumAsByte<EPlayerStats>, TEnumAsByte<EStatBonuses>> StatBonuses;
@@ -227,9 +249,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FName MagicType;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int MaxStorageNum;
+	
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int FPCost;
@@ -342,7 +362,10 @@ public:
 	int Level;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int Curse;
-
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TMap<TEnumAsByte<EPlayerStats>, int> Stats;
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int MaxHP;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -356,8 +379,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int MaxStamina;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TMap<TEnumAsByte<EPlayerStats>, int> Stats;
+	
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int MaxEquipLoad;
@@ -639,3 +661,24 @@ public:
 
 #pragma endregion Menu_AttrStructs
 ////-------------------------------- END_REGION --------------------------------////
+
+
+USTRUCT(BlueprintType)
+struct FItemOnGroundAttr : public FTableRowBase
+{
+	GENERATED_BODY()
+
+	FItemOnGroundAttr() {}
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FName ActorClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FName MeshName;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FName TipWidgetClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FName PickupWidgetClass;
+};

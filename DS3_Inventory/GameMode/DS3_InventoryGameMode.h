@@ -13,6 +13,11 @@ class ADS3_InventoryGameMode : public AGameModeBase
 
 public:
 	ADS3_InventoryGameMode();
+
+	virtual void BeginPlay() override;
+
+	UFUNCTION()
+	void EndPickupItem(int Remain, FName Index, FVector Location);
 };
 
 

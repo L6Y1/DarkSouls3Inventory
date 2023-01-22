@@ -5,22 +5,6 @@
 
 #include "JsonObjectConverter.h"
 
-FGridData FGameSaveTool::GetClassifiedGridDataByIndex(TEnumAsByte<EItemClassification> Classification, int Index)
-{
-	auto GameSaveData = FFileTool::LoadGame();
-	if (GameSaveData.PlayerData.InventoryData.GridDatas.Find(Classification)->ClassifiedGridDataArray.IsValidIndex(Index))
-	{
-		return GameSaveData.PlayerData.InventoryData.GridDatas.Find(Classification)->ClassifiedGridDataArray[Index];
-	}
-	return FGridData(0, 0);
-}
-
-int FGameSaveTool::GetTotalItemNumberByClassification(TEnumAsByte<EItemClassification> Classification)
-{
-	auto GameSaveData = FFileTool::LoadGame();
-	return GameSaveData.PlayerData.InventoryData.GridDatas.Find(Classification)->ClassifiedGridDataArray.Num();
-}
-
 #include "Kismet/KismetSystemLibrary.h"
 
 FGameSaveData FFileTool::LoadGame(FString RelativePath, FString FileName)
@@ -431,4 +415,97 @@ FString FJsonTool::GetJsonStrFromGameSaveData(FGameSaveData GameSaveData)
 	JsonWriter->Close();
 	
 	return JsonStr;
+}
+
+FGridData FGameSaveTool::GetClassifiedGridDataByIndex(TEnumAsByte<EItemClassification> Classification, int Index)
+{
+	auto GameSaveData = FFileTool::LoadGame();
+	if (GameSaveData.PlayerData.InventoryData.GridDatas.Find(Classification)->ClassifiedGridDataArray.IsValidIndex(Index))
+	{
+		return GameSaveData.PlayerData.InventoryData.GridDatas.Find(Classification)->ClassifiedGridDataArray[Index];
+	}
+	return FGridData(0, 0);
+}
+
+int FGameSaveTool::GetTotalItemNumberByClassification(TEnumAsByte<EItemClassification> Classification)
+{
+	auto GameSaveData = FFileTool::LoadGame();
+	return GameSaveData.PlayerData.InventoryData.GridDatas.Find(Classification)->ClassifiedGridDataArray.Num();
+}
+
+void FGameSaveTool::SaveGrid(int Index, FGridData GridData)
+{
+	auto GameSaveData = FFileTool::LoadGame();
+	if (Index == -1)
+	{
+		GameSaveData.PlayerData.InventoryData.GridDatas.Find(TEnumAsByte<EItemClassification>(GridData.ItemID / 10000 - 1))->ClassifiedGridDataArray.Add(GridData);
+	}
+	else
+	{
+		GameSaveData.PlayerData.InventoryData.GridDatas.Find(TEnumAsByte<EItemClassification>(GridData.ItemID / 10000 - 1))->ClassifiedGridDataArray[Index] = GridData;
+	}
+	FFileTool::SaveGame(GameSaveData);
+}
+
+void FGameSaveTool::SaveStorageGrid(int Index, FGridData GridData)
+{
+	auto GameSaveData = FFileTool::LoadGame();
+	if (Index == -1)
+	{
+		GameSaveData.PlayerData.InventoryData.StorageGridDatas.Find(TEnumAsByte<EItemClassification>(GridData.ItemID / 10000 - 1))->ClassifiedStorageGridDataArray.Add(GridData);
+	}
+	else
+	{
+		GameSaveData.PlayerData.InventoryData.StorageGridDatas.Find(TEnumAsByte<EItemClassification>(GridData.ItemID / 10000 - 1))->ClassifiedStorageGridDataArray[Index] = GridData;
+	}
+	FFileTool::SaveGame(GameSaveData);
+}
+
+TMap<FName, FItemOnGroundData> FGameSaveTool::GetItemOnGroundDatas()
+{
+	auto GameSaveData = FFileTool::LoadGame();
+	return GameSaveData.ItemOnGroundData;
+}
+
+FItemOnGroundData FGameSaveTool::GetItemOnGroundDataByIndex(FName Index)
+{
+	auto GameSaveData = FFileTool::LoadGame();
+	return *GameSaveData.ItemOnGroundData.Find(Index);
+}
+
+void FGameSaveTool::SetItemOnGroundDataByIndex(FName Index, FItemOnGroundData NewData)
+{
+	auto GameSaveData = FFileTool::LoadGame();
+	*GameSaveData.ItemOnGroundData.Find(Index) = NewData;
+
+	FFileTool::SaveGame(GameSaveData);
+}
+
+void FGameSaveTool::RemoveItemOnGroundDataByIndex(const FName &Index)
+{
+	auto GameSaveData = FFileTool::LoadGame();
+	GameSaveData.ItemOnGroundData.Remove(Index);
+	FFileTool::SaveGame(GameSaveData);
+}
+
+bool FGameSaveTool::ItemOnGroundExist(FName Index)
+{
+	FItemOnGroundData *ItemOnGroundData = FFileTool::LoadGame().ItemOnGroundData.Find(Index);
+	return !!ItemOnGroundData;
+}
+
+void FGameSaveTool::AddItemOnGroundData(FName Index, FItemOnGroundData NewData)
+{
+	auto ItemOnGroundDatas = FGameSaveTool::GetItemOnGroundDatas();
+	int NumTemp = 0;
+	
+	do
+	{
+		Index = FName(FString("Item_") + FString::FromInt(NumTemp));
+		++NumTemp;
+	} while (ItemOnGroundDatas.Contains(Index));
+	NewData.ItemOnGroundIndex = Index;
+	auto GameSaveData = FFileTool::LoadGame();
+	GameSaveData.ItemOnGroundData.Add(Index, NewData);
+	FFileTool::SaveGame(GameSaveData);
 }

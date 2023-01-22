@@ -23,6 +23,6 @@ void UStatusUnit::Init(FString Name, int Value)
 			StatusImage->SetBrush(Brush);
 		}
 	});
-	StatusText->SetText(FText::FromString(Name));
+	StatusText->SetText(FText::FromString(Name.Replace(TEXT("Img"), TEXT(""))));
 	StatusValueText->SetText(FText::FromString(FString::FromInt(Value)));
 }

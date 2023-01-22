@@ -92,31 +92,7 @@ void UItemGridType1::NativeOnListItemObjectSet(UObject *ListItemObject)
 	}
 	
 	// get item attributes by GridData.ID in corresponding DataTable
-	FInventoryItemAttr *Attr = nullptr;
-	switch (ListViewData->ItemClassification)
-	{
-	default:
-		checkf(Attr != nullptr, TEXT("Attr is nullpointer"));
-		break;
-	case 0:
-		Attr = FDataTableTool::GetConsumablesItemAttr(IntToName(GridData.ItemID));
-		break;
-	case 1:
-		Attr = FDataTableTool::GetWeaponItemAttr(IntToName(GridData.ItemID));
-		break;
-	case 2:
-		Attr = FDataTableTool::GetWearableEquipmentItemAttr(IntToName(GridData.ItemID));
-		break;
-	case 3:
-		Attr = FDataTableTool::GetImportantItemAttr(IntToName(GridData.ItemID));
-		break;
-	case 4:
-		Attr = FDataTableTool::GetMagicItemAttr(IntToName(GridData.ItemID));
-		break;
-	case 5:
-		Attr = FDataTableTool::GetRingItemAttr(IntToName(GridData.ItemID));
-		break;
-	}
+	FInventoryItemAttr *Attr = FDataTableTool::GetInventoryItemAttrByID(GridData.ItemID);
 
 	ItemNumText->SetText(FText::FromString(FString::FromInt(GridData.Num)));
 	Attr->bShowNum ? ItemNumText->SetVisibility(ESlateVisibility::Visible) : ItemNumText->SetVisibility(ESlateVisibility::Collapsed);

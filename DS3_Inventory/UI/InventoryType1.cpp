@@ -22,7 +22,7 @@ void UInventoryType1::NativeConstruct()
 	Super::NativeConstruct();
 	FGlobalEventManager::RegisterEvent(FName("CardActiveEvent"), this, FName("OnClassificationChange"));
 	FGlobalEventManager::RegisterEvent(FName("ItemSelectedEvent"), this, FName("OnItemSelected"));
-
+	
 }
 
 void UInventoryType1::NativeDestruct()
@@ -92,6 +92,7 @@ void UInventoryType1::OnClassificationChange(TEnumAsByte<EItemClassification> Ne
 	ItemsTileView->ClearListItems();
 	FString ItemGridSkinType;
 	
+	
 	GConfig->GetString(
 		TEXT("GameUIInit/ItemParts/InventoryWidgetType1/ItemGridWidgetType1"),
 		TEXT("ItemGridWidgetType1SkinType"),
@@ -105,7 +106,6 @@ void UInventoryType1::OnClassificationChange(TEnumAsByte<EItemClassification> Ne
 	
 	for (int i = 0; i < GridNum; ++i)
 	{
-		auto GridData = FGameSaveTool::GetClassifiedGridDataByIndex(NewClassification, i);
 		UListViewData *Item = NewObject<UListViewData>();
 		Item->Index = i;
 		Item->ItemClassification = NewClassification;
@@ -121,4 +121,6 @@ void UInventoryType1::OnItemSelected(FName ItemName, int ItemID)
 		ItemNameText->SetText(FText::FromName(ItemName)), ItemNameText->SetVisibility(ESlateVisibility::Visible) :
 		ItemNameText->SetVisibility(ESlateVisibility::Collapsed);
 }
+
+
 

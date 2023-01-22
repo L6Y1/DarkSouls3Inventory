@@ -57,4 +57,8 @@ public:
 public:
 	UFUNCTION()
 	void Init(FFullScreenDisplayType1Attr FullScreenDisplayType1Attr, TArray<FName> WidgetPartsClassName);
+
+	UFUNCTION()
+	void CreateDescription(FName ItemName, int ItemID);
 };
+

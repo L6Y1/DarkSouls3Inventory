@@ -6,6 +6,8 @@
 #include "GameFramework/Character.h"
 #include "DS3_InventoryCharacter.generated.h"
 
+class UInteractiveComp;
+class UInventoryComponent;
 UCLASS(config=Game)
 class ADS3_InventoryCharacter : public ACharacter
 {
@@ -18,6 +20,9 @@ class ADS3_InventoryCharacter : public ACharacter
 	/** Follow camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* FollowCamera;
+
+	
+	
 public:
 	ADS3_InventoryCharacter();
 
@@ -28,7 +33,14 @@ public:
 	/** Base look up/down rate, in deg/sec. Other scaling may affect final rate. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
 	float BaseLookUpRate;
+	
+	/* Inventory Component */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UInventoryComponent *InventoryComponent;
 
+	/* Interactive Component */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UInteractiveComp *InteractiveComponent;
 protected:
 
 	/** Called for forwards/backward input */
