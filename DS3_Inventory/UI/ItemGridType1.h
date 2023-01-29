@@ -14,7 +14,7 @@ class USizeBox;
 /**
  * 
  */
-UCLASS()
+UCLASS(Blueprintable, BlueprintType)
 class DS3_INVENTORY_API UItemGridType1 : public UUserWidget, public IUserObjectListEntry
 {
 	GENERATED_BODY()
@@ -32,8 +32,10 @@ public:
 	// IUserObjectListEntry implementation
 	virtual void NativeOnListItemObjectSet(UObject *ListItemObject) override;
 	virtual void NativeOnItemSelectionChanged(bool bIsSelected) override;
+	virtual FReply NativeOnKeyDown(const FGeometry &InGeometry, const FKeyEvent &InKeyEvent) override;
 	
-	
+	virtual FReply NativeOnFocusReceived(const FGeometry &InGeometry, const FFocusEvent &InFocusEvent) override;
+	virtual void NativeOnFocusLost(const FFocusEvent &InFocusEvent) override;
 public:
 	UPROPERTY(meta=(BindWidget), VisibleAnywhere, BlueprintReadOnly)
 	USizeBox *ItemGridSizeBox;
@@ -63,6 +65,6 @@ public:
 
 public:
 	// UFUNCTION()
-	// void Init();
-	
+	// void OnGridHovered();
+
 };

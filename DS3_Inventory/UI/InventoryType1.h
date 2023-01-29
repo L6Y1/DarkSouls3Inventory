@@ -50,6 +50,8 @@ public:
 	UPROPERTY(meta=(BindWidget), VisibleAnywhere, BlueprintReadOnly)
 	UTileView *ItemsTileView;
 
+	// current viewing item in ItemsTileView
+	UObject *CurrentItem;
 public:
 	UFUNCTION()
 	void Init(FInventoryType1Attr InventoryAttr);

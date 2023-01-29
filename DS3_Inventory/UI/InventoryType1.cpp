@@ -2,6 +2,8 @@
 
 
 #include "InventoryType1.h"
+
+#include "ItemGridType1.h"
 #include "PaperSprite.h"
 #include "Components/Image.h"
 #include "Components/NamedSlot.h"
@@ -13,6 +15,7 @@
 #include "DS3_Inventory/Utils/DataTableTool/DataTableTool.h"
 #include "DS3_Inventory/Utils/FileTool/FileTool.h"
 #include "DS3_Inventory/Utils/GlobalEventManager/GlobalEventManager.h"
+#include "Kismet/KismetSystemLibrary.h"
 #include "Slate/SlateTextureAtlasInterface.h"
 
 
@@ -113,6 +116,34 @@ void UInventoryType1::OnClassificationChange(TEnumAsByte<EItemClassification> Ne
 		
 		ItemsTileView->AddItem(Item);
 	}
+
+	
+	// ItemsTileView->OnListViewScrolled().AddLambda([this](float X, float Y)
+	// {
+	// 	// auto Items = ItemsTileView->GetListItems();
+	// 	auto Entries = ItemsTileView->GetDisplayedEntryWidgets();
+	// 	Entries[0]->SetFocus();
+	// 	ItemsTileView->SetSelectedItem(Cast<UItemGridType1>(Entries[0])->GetListItem<UObject>());
+	// });
+	
+
+	// ItemsTileView->OnItemSelectionChanged().AddLambda([this](UObject *Item)
+	// {
+	// 	if (IsValid(CurrentItem))
+	// 	{
+	// 		UKismetSystemLibrary::PrintString(nullptr,
+	// 			FString("ItemSelection delegate fired at item :") + FString::FromInt(Cast<UListViewData>(CurrentItem)->Index));
+	// 	}
+	// 	CurrentItem = Item;
+	// });
+
+	
+
+	// ItemsTileView->OnEntryWidgetReleased().AddLambda([this](UUserWidget &Widget)
+	// {
+	// 	auto Entries = ItemsTileView->GetDisplayedEntryWidgets();
+	// 	ItemsTileView->SetSelectedItem(Cast<IUserObjectListEntry>(Entries[0])->GetListItem<UListViewData>());
+	// });
 }
 
 void UInventoryType1::OnItemSelected(FName ItemName, int ItemID)

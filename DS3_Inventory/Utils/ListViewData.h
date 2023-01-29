@@ -10,7 +10,7 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(BlueprintType, Blueprintable)
 class DS3_INVENTORY_API UListViewData : public UObject
 {
 	GENERATED_BODY()

@@ -5,6 +5,7 @@
 
 #include "PaperSprite.h"
 #include "Components/Image.h"
+#include "Components/ListView.h"
 #include "Components/SizeBox.h"
 #include "Components/TextBlock.h"
 
@@ -62,7 +63,7 @@ void UItemGridType1::NativeOnListItemObjectSet(UObject *ListItemObject)
 			ListViewData->ItemGridAttr.DishImage,
 			ListViewData->ItemGridAttr.SelectImage
 					},
-		[this, ListViewData](TArray<UObject*> AssetObjs)
+		[this](TArray<UObject*> AssetObjs)
 		{
 			auto GridBaseImageSprite = Cast<UPaperSprite>(AssetObjs[0]);
 			auto DishImageTexture = Cast<UTexture2D>(AssetObjs[1]);
@@ -107,7 +108,7 @@ void UItemGridType1::NativeOnListItemObjectSet(UObject *ListItemObject)
 			ListViewData->ItemGridAttr.SelectImage,
 			Attr->ItemImage
 					},
-		[this, ListViewData](TArray<UObject*> AssetObjs)
+		[this](TArray<UObject*> AssetObjs)
 		{
 			auto GridBaseImageSprite = Cast<UPaperSprite>(AssetObjs[0]);
 			auto DishImageTexture = Cast<UTexture2D>(AssetObjs[1]);
@@ -132,7 +133,9 @@ void UItemGridType1::NativeOnListItemObjectSet(UObject *ListItemObject)
 				Brush.SetResourceObject(SelectImageSprite);
 				Brush.ImageSize = SpriteSize;
 				SelectImage->SetBrush(Brush);
-				SelectImage->SetVisibility(ESlateVisibility::Collapsed);
+				HasUserFocus(GetOwningPlayer()) ?
+					SelectImage->SetVisibility(ESlateVisibility::Visible) :
+					SelectImage->SetVisibility(ESlateVisibility::Collapsed);
 			}
 			
 			ItemImage->SetBrushFromTexture(ItemImageTexture);
@@ -140,6 +143,7 @@ void UItemGridType1::NativeOnListItemObjectSet(UObject *ListItemObject)
 			ItemImage->SetVisibility(ESlateVisibility::Visible);
 			DishImage->SetVisibility(ESlateVisibility::Visible);
 		});
+
 	
 }
 
@@ -148,8 +152,7 @@ void UItemGridType1::NativeOnItemSelectionChanged(bool bIsSelected)
 	IUserObjectListEntry::NativeOnItemSelectionChanged(bIsSelected);
 	if (bIsSelected)
 	{
-		SelectImage->SetVisibility(ESlateVisibility::Visible);
-
+		SetFocus();
 		struct 
 		{
 			FName ItemName;
@@ -159,9 +162,33 @@ void UItemGridType1::NativeOnItemSelectionChanged(bool bIsSelected)
 		Params.ItemName = ItemName;
 		FGlobalEventManager::TriggerEvent(FName("ItemSelectedEvent"), &Params);
 	}
-	else
+	
+}
+
+FReply UItemGridType1::NativeOnKeyDown(const FGeometry &InGeometry, const FKeyEvent &InKeyEvent)
+{
+	Super::NativeOnKeyDown(InGeometry, InKeyEvent);
+	
+	if (InKeyEvent.GetKey() == EKeys::E && HasUserFocus(GetOwningPlayer()))
 	{
-		SelectImage->SetVisibility(ESlateVisibility::Collapsed);
+		auto ListViewData = this->GetListItem<UListViewData>();
+		UKismetSystemLibrary::PrintString(this, FString::FromInt(ListViewData->Index));
 	}
 	
+	return FReply::Handled();
+}
+
+FReply UItemGridType1::NativeOnFocusReceived(const FGeometry &InGeometry, const FFocusEvent &InFocusEvent)
+{
+	Super::NativeOnFocusReceived(InGeometry, InFocusEvent);
+
+	SelectImage->SetVisibility(ESlateVisibility::Visible);
+	
+	return FReply::Handled();
+}
+
+void UItemGridType1::NativeOnFocusLost(const FFocusEvent &InFocusEvent)
+{
+	Super::NativeOnFocusLost(InFocusEvent);
+	SelectImage->SetVisibility(ESlateVisibility::Collapsed);
 }
